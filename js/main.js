@@ -1,0 +1,9 @@
+renderFeaturedRows();
+updateAccountButton();
+renderMarkaChips();
+renderModelChips();
+updateFilterButton();
+renderSidebar();
+renderGrid();
+updateApplyBtnLabel();
+updateCart();
