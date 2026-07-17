@@ -31,6 +31,8 @@ function removeItem(id){
 }
 
 function updateCart(){
+  renderGrid();
+  renderFeaturedRows();
   const count = Object.values(cart).reduce((a,b) => a+b, 0);
   document.getElementById('cartCount').textContent = count;
 

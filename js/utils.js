@@ -54,11 +54,11 @@ fetch('https://open.er-api.com/v6/latest/USD')
 
 function brandLabel(key){ const c = CATEGORIES.find(c => c.key === key); return c ? c.label : key; }
 function categoryAccentBg(brand){
-  const map = {kilif:'#FFECEA', sarj:'#FFF6DE', ekran:'#EEF2FF', aksesuar:'#F3EEFF'};
+  const map = {kilif:'var(--status-red-bg)', sarj:'var(--status-amber-bg)', ekran:'var(--status-blue-bg)', aksesuar:'var(--status-purple-bg)'};
   return map[brand] || 'var(--bg-soft)';
 }
 function categoryAccentFg(brand){
-  const map = {kilif:'var(--red)', sarj:'#B4880A', ekran:'var(--blue-dark)', aksesuar:'#7B4FD1'};
+  const map = {kilif:'var(--status-red-text)', sarj:'var(--status-amber-text)', ekran:'var(--status-blue-text)', aksesuar:'var(--status-purple-text)'};
   return map[brand] || 'var(--muted)';
 }
 function subLabel(brand, sub){

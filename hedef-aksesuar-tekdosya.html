@@ -26,6 +26,11 @@
     --fixed-dark:#15151A;
     --solid:#15151A;
     --solid-text:#FFFFFF;
+    --status-red-bg:#FFECEA; --status-red-text:#E42313;
+    --status-amber-bg:#FFF6DE; --status-amber-text:#B4880A;
+    --status-blue-bg:#EEF2FF; --status-blue-text:#13379E;
+    --status-purple-bg:#F3EEFF; --status-purple-text:#7B4FD1;
+    --status-green-bg:#EAF7EC; --status-green-text:#1E7B34;
   }
   :root[data-theme="dark"]{
     --bg:#18181C;
@@ -37,6 +42,11 @@
     --shadow: 0 10px 30px rgba(0,0,0,0.45);
     --solid:#EDEDEC;
     --solid-text:#18181C;
+    --status-red-bg:rgba(228,35,19,0.16); --status-red-text:#FF8A7E;
+    --status-amber-bg:rgba(180,136,10,0.24); --status-amber-text:#E4B558;
+    --status-blue-bg:rgba(27,72,214,0.22); --status-blue-text:#93ABF2;
+    --status-purple-bg:rgba(123,79,209,0.24); --status-purple-text:#C7ABF3;
+    --status-green-bg:rgba(30,123,52,0.22); --status-green-text:#74CE92;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth; height:100%;}
@@ -341,27 +351,29 @@
   .admin-exit-btn:hover{opacity:.7;}
   body.admin-mode .admin-exit-btn{display:flex;}
   body.admin-mode .nav-links{display:none;}
+  body.admin-mode .nav{display:flex; justify-content:space-between; align-items:center;}
+  body.admin-mode #cartBtn{display:none;}
 
   .admin-tabs{
-    display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; border-bottom:1px solid var(--line); padding-bottom:16px;
+    display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; border-bottom:1px solid var(--line); padding-bottom:12px;
   }
   .admin-tab-btn{
-    display:inline-flex; align-items:center; gap:7px;
-    padding:11px 18px; border-radius:100px; font-weight:600; font-size:14px; color:var(--muted);
+    display:inline-flex; align-items:center; gap:6px;
+    padding:9px 15px; border-radius:100px; font-weight:600; font-size:13.5px; color:var(--muted);
     border:1.5px solid var(--line); transition:all .15s ease;
   }
   .admin-tab-btn:hover{color:var(--ink); border-color:var(--ink);}
   .admin-tab-btn.active{background:var(--solid); color:var(--solid-text); border-color:var(--solid);}
 
-  .admin-panel{padding-bottom:60px;}
-  .admin-panel-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
-  .admin-panel-head h3{font-size:20px;}
+  .admin-panel{padding-bottom:40px;}
+  .admin-panel-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+  .admin-panel-head h3{font-size:18px;}
   .muted-count{color:var(--muted); font-weight:500; font-size:14px;}
-  .muted-note{color:var(--muted); font-size:14px; margin-bottom:16px; line-height:1.65;}
+  .muted-note{color:var(--muted); font-size:13.5px; margin-bottom:12px; line-height:1.6;}
 
-  .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:28px;}
+  .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px;}
   .stat-card{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px;
     position:relative; overflow:hidden;
   }
   .stat-card::before{content:""; position:absolute; top:0; left:0; right:0; height:4px; background:var(--line);}
@@ -369,20 +381,20 @@
   .stat-card:nth-child(2)::before{background:var(--yellow);}
   .stat-card:nth-child(3)::before{background:var(--red);}
   .stat-card.warn::before{background:var(--red);}
-  .stat-card .stat-label{font-size:13px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em;}
-  .stat-card .stat-value{font-family:'IBM Plex Mono',monospace; font-size:31px; font-weight:600; margin-top:8px;}
+  .stat-card .stat-label{font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em;}
+  .stat-card .stat-value{font-family:'IBM Plex Mono',monospace; font-size:26px; font-weight:600; margin-top:6px;}
   .stat-card.warn .stat-value{color:var(--red);}
 
   .admin-card{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:26px; margin-bottom:22px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin-bottom:16px;
   }
-  .admin-card h3{font-size:18px; margin-bottom:16px;}
-  .admin-two-col{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .admin-card h3{font-size:16.5px; margin-bottom:12px;}
+  .admin-two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
 
   .admin-table-wrap{overflow-x:auto;}
 
   .stock-card{
-    background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:12px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:9px;
     transition:border-color .15s ease;
   }
   .stock-card:hover{border-color:#DCE4FF;}
@@ -437,7 +449,7 @@
     text-align:left; padding:12px; color:var(--muted); font-weight:700; font-size:12px;
     text-transform:uppercase; letter-spacing:.03em; border-bottom:1.5px solid var(--line); white-space:nowrap;
   }
-  .admin-table td{padding:14px 12px; border-bottom:1px solid var(--line); vertical-align:middle;}
+  .admin-table td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:middle;}
   .admin-thumb{
     width:44px; height:44px; border-radius:8px; background:var(--bg-soft); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:18px;
   }
@@ -460,18 +472,18 @@
   .stock-badge{
     font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:12.5px; padding:3px 9px; border-radius:100px;
   }
-  .stock-ok{background:#EAF7EC; color:#1E7B34;}
-  .stock-low{background:#FFF6DE; color:#B4880A;}
-  .stock-out{background:#FFECEA; color:var(--red);}
+  .stock-ok{background:var(--status-green-bg); color:var(--status-green-text);}
+  .stock-low{background:var(--status-amber-bg); color:var(--status-amber-text);}
+  .stock-out{background:var(--status-red-bg); color:var(--status-red-text);}
   .warn-badge{
-    display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; color:var(--red);
-    background:#FFECEA; padding:4px 10px; border-radius:100px;
+    display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; color:var(--status-red-text);
+    background:var(--status-red-bg); padding:4px 10px; border-radius:100px;
   }
 
   .admin-form-row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
   .admin-form-row .admin-input{flex:1; min-width:140px;}
   .admin-form{
-    background:var(--bg-soft); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin-bottom:22px;
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin-bottom:16px;
   }
   .admin-form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
   .admin-form label{font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:6px; text-transform:uppercase; letter-spacing:.03em;}
@@ -511,24 +523,49 @@
   .variant-photo-btn.has-photo:hover{background:var(--blue); color:#fff;}
 
   .barcode-grid{display:flex; flex-wrap:wrap; gap:14px;}
-  .barcode-model-group{padding:14px 0; border-bottom:1px dashed var(--line);}
-  .barcode-model-group:last-child{border-bottom:none; padding-bottom:0;}
-  .barcode-model-group:first-child{padding-top:0;}
   .barcode-card{
     border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--surface);
     display:flex; flex-direction:column; align-items:center; gap:8px; min-width:180px;
   }
   .barcode-label{font-size:12px; font-weight:700; color:var(--ink); text-align:center;}
   .barcode-manual-tag{
-    display:inline-block; font-size:10px; font-weight:700; color:#1E7B34; background:#EAF7EC;
+    display:inline-block; font-size:10px; font-weight:700; color:var(--status-green-text); background:var(--status-green-bg);
     padding:2px 7px; border-radius:100px; text-transform:uppercase; letter-spacing:.02em;
+  }
+
+  /* Barkodlar sekmesi — sıkı satır düzeni (model + desen ön planda, barkod görseli ikincil) */
+  .barcode-model-block{padding:12px 0; border-bottom:1px dashed var(--line);}
+  .barcode-model-block:last-child{border-bottom:none; padding-bottom:0;}
+  .barcode-model-block:first-child{padding-top:0;}
+  .barcode-list{background:var(--bg-soft); border-radius:10px; padding:2px 14px;}
+  .barcode-row{
+    display:grid; grid-template-columns:1fr auto 96px auto; align-items:center; gap:12px;
+    padding:8px 0; border-bottom:1px solid var(--line);
+  }
+  .barcode-row:last-child{border-bottom:none;}
+  .barcode-row-name{display:flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:var(--ink); min-width:0;}
+  .barcode-row-svg{display:flex; align-items:center;}
+  .barcode-row-code{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); white-space:nowrap; text-align:right;}
+  .barcode-manual-tag-mini{
+    font-size:9px; font-weight:700; color:var(--status-green-text); background:var(--status-green-bg);
+    padding:1px 6px; border-radius:100px; text-transform:uppercase; letter-spacing:.02em; flex-shrink:0;
+  }
+  .barcode-row-action{display:flex; align-items:center; gap:5px;}
+  .barcode-mini-input{
+    width:78px; padding:5px 7px; border-radius:7px; border:1.5px solid var(--line); background:var(--surface);
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-align:center; color:var(--ink);
+  }
+  .barcode-mini-input:focus{outline:none; border-color:var(--blue);}
+  @media (max-width:700px){
+    .barcode-row{grid-template-columns:1fr auto; row-gap:6px;}
+    .barcode-row-code{display:none;}
   }
   .tag-input-field{
     width:100%; border:none; outline:none; font-family:inherit; font-size:14.5px; padding:4px 2px; background:transparent;
   }
 
   .category-row, .brand-row, .tier-row, .dealer-row{
-    display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line); font-size:14.5px;
+    display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line); font-size:14.5px;
   }
   .category-row:last-child, .brand-row:last-child, .tier-row:last-child, .dealer-row:last-child{border-bottom:none;}
   .brand-models{padding:10px 0 4px 4px; margin-top:10px; border-top:1px dashed var(--line);}
@@ -1543,11 +1580,11 @@ fetch('https://open.er-api.com/v6/latest/USD')
 
 function brandLabel(key){ const c = CATEGORIES.find(c => c.key === key); return c ? c.label : key; }
 function categoryAccentBg(brand){
-  const map = {kilif:'#FFECEA', sarj:'#FFF6DE', ekran:'#EEF2FF', aksesuar:'#F3EEFF'};
+  const map = {kilif:'var(--status-red-bg)', sarj:'var(--status-amber-bg)', ekran:'var(--status-blue-bg)', aksesuar:'var(--status-purple-bg)'};
   return map[brand] || 'var(--bg-soft)';
 }
 function categoryAccentFg(brand){
-  const map = {kilif:'var(--red)', sarj:'#B4880A', ekran:'var(--blue-dark)', aksesuar:'#7B4FD1'};
+  const map = {kilif:'var(--status-red-text)', sarj:'var(--status-amber-text)', ekran:'var(--status-blue-text)', aksesuar:'var(--status-purple-text)'};
   return map[brand] || 'var(--muted)';
 }
 function subLabel(brand, sub){
@@ -1683,6 +1720,7 @@ function buildCard(p, i){
   card.style.animationDelay = (i*0.03) + 's';
   const outOfStock = (p.stock !== undefined && p.stock <= 0);
   const lowStock = (p.stock !== undefined && p.stock > 0 && p.stock <= (p.lowStockThreshold || 5));
+  const cannotAddMore = (p.stock !== undefined && remainingStock(p.id) <= 0);
   card.innerHTML = `
     <div class="card-media">
       ${p.tag ? `<span class="tag">${p.tag}</span>` : ''}
@@ -1695,7 +1733,7 @@ function buildCard(p, i){
       ${lowStock ? `<span class="warn-badge">⚠️ Son ${p.stock} adet</span>` : ''}
       <div class="card-bottom">
         <span class="price">${fmt(p)}</span>
-        <button class="add-btn" aria-label="Sepete ekle" data-id="${p.id}" ${outOfStock ? 'disabled style="opacity:.35;cursor:not-allowed;"' : ''}>
+        <button class="add-btn" aria-label="Sepete ekle" data-id="${p.id}" ${cannotAddMore ? 'disabled style="opacity:.35;cursor:not-allowed;"' : ''}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>
@@ -1891,6 +1929,8 @@ function removeItem(id){
 }
 
 function updateCart(){
+  renderGrid();
+  renderFeaturedRows();
   const count = Object.values(cart).reduce((a,b) => a+b, 0);
   document.getElementById('cartCount').textContent = count;
 
@@ -2846,6 +2886,20 @@ function generateBarcodeSVG(code){
     <text x="${totalWidth / 2}" y="${barHeight + 14}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="#1a1a1f">${code}</text>
   </svg>`;
 }
+function generateBarcodeSVGCompact(code){
+  const barHeight = 24;
+  let x = 2;
+  let bars = '';
+  code.split('').forEach((d, i) => {
+    const w = (parseInt(d, 10) % 2) + 1;
+    if(i % 2 === 0){
+      bars += `<rect x="${x}" y="0" width="${w}" height="${barHeight}" fill="currentColor"/>`;
+    }
+    x += w;
+  });
+  const totalWidth = x + 2;
+  return `<svg viewBox="0 0 ${totalWidth} ${barHeight}" height="${barHeight}" xmlns="http://www.w3.org/2000/svg" style="display:block; color:var(--ink); opacity:.8;">${bars}</svg>`;
+}
 function renderVariantBarcodes(){
   const el = document.getElementById('pf_barcodes');
   if(!el) return;
@@ -3455,54 +3509,56 @@ function renderBarcodeTab(){
       </div>
       <div class="stock-variant-section ${isOpen ? 'open' : ''}">
         ${hasModels ? barcodeModelMatrixHTML(p, columns) : `
-        <div class="barcode-grid">
-          ${p.variants.colors.map((c, i) => barcodeCardHTML(p, 'color', i, c)).join('')}
-          ${(p.variants.patterns || []).map((pt, i) => barcodeCardHTML(p, 'pattern', i, pt)).join('')}
+        <div class="barcode-list">
+          ${p.variants.colors.map((c, i) => barcodeRowHTML(p, 'color', i, c)).join('')}
+          ${(p.variants.patterns || []).map((pt, i) => barcodeRowHTML(p, 'pattern', i, pt)).join('')}
         </div>
         `}
       </div>
     </div>`;
   }).join('');
 }
-function barcodeCardHTML(p, kind, idx, variant){
+function barcodeRowHTML(p, kind, idx, variant){
   const code = variant.barcode || generateBarcodeNumber(p.id, variant.name);
-  const kindLabel = kind === 'color' ? 'Renk' : 'Desen';
+  const dot = kind === 'color' ? `<span class="tag-chip-dot" style="background:${colorHex(variant.name)};"></span>` : '';
   const fieldId = `barcodeManualInput_${p.id}_${kind}_${idx}`;
-  return `<div class="barcode-card">
-    <div class="barcode-label">${kindLabel}: ${variant.name}${variant.barcode ? ' <span class="barcode-manual-tag">Elle eklendi</span>' : ''}</div>
-    ${generateBarcodeSVG(code)}
-    ${variant.barcode
-      ? `<button type="button" class="admin-action-btn danger" onclick="resetProductVariantBarcode(${p.id}, '${kind}', ${idx})">🗑 Kaldır</button>`
-      : `<div class="admin-form-row" style="margin-top:0;">
-          <input class="admin-input" id="${fieldId}" placeholder="Barkod no" style="font-size:12px; padding:8px 10px; min-width:110px;">
-          <button type="button" class="admin-action-btn" onclick="saveManualBarcodeFromField(${p.id}, '${kind}', ${idx})">Ekle</button>
-        </div>`}
+  return `<div class="barcode-row">
+    <span class="barcode-row-name">${dot}${variant.name}${variant.barcode ? '<span class="barcode-manual-tag-mini">Elle</span>' : ''}</span>
+    <span class="barcode-row-svg">${generateBarcodeSVGCompact(code)}</span>
+    <span class="barcode-row-code">${code}</span>
+    <span class="barcode-row-action">
+      ${variant.barcode
+        ? `<button type="button" class="admin-btn-icon danger" onclick="resetProductVariantBarcode(${p.id}, '${kind}', ${idx})" title="Kaldır">🗑</button>`
+        : `<input class="barcode-mini-input" id="${fieldId}" placeholder="Barkod no">
+           <button type="button" class="admin-btn-icon" onclick="saveManualBarcodeFromField(${p.id}, '${kind}', ${idx})" title="Ekle">＋</button>`}
+    </span>
   </div>`;
 }
 function barcodeModelMatrixHTML(p, columns){
   return p.variants.models.map((m, mi) => `
-    <div class="barcode-model-group">
+    <div class="barcode-model-block">
       <div class="stock-variant-group-label">📱 ${m.name}</div>
-      <div class="barcode-grid">
-        ${columns.map((col, ci) => barcodeModelVariantCardHTML(p, mi, m, col, ci)).join('')}
+      <div class="barcode-list">
+        ${columns.map((col, ci) => barcodeModelVariantRowHTML(p, mi, m, col, ci)).join('')}
       </div>
     </div>
   `).join('');
 }
-function barcodeModelVariantCardHTML(p, modelIdx, m, col, colIdx){
+function barcodeModelVariantRowHTML(p, modelIdx, m, col, colIdx){
   const manual = m.variantBarcodes && m.variantBarcodes[col.name];
   const code = manual || generateBarcodeNumber(p.id + '-' + m.name, col.name);
-  const kindLabel = col.type === 'color' ? 'Renk' : 'Desen';
+  const dot = col.type === 'color' ? `<span class="tag-chip-dot" style="background:${colorHex(col.name)};"></span>` : '';
   const fieldId = `barcodeModelInput_${p.id}_${modelIdx}_${colIdx}`;
-  return `<div class="barcode-card">
-    <div class="barcode-label">${kindLabel}: ${col.name}${manual ? ' <span class="barcode-manual-tag">Elle eklendi</span>' : ''}</div>
-    ${generateBarcodeSVG(code)}
-    ${manual
-      ? `<button type="button" class="admin-action-btn danger" onclick="resetModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}')">🗑 Kaldır</button>`
-      : `<div class="admin-form-row" style="margin-top:0;">
-          <input class="admin-input" id="${fieldId}" placeholder="Barkod no" style="font-size:12px; padding:8px 10px; min-width:110px;">
-          <button type="button" class="admin-action-btn" onclick="saveModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}', '${fieldId}')">Ekle</button>
-        </div>`}
+  return `<div class="barcode-row">
+    <span class="barcode-row-name">${dot}${col.name}${manual ? '<span class="barcode-manual-tag-mini">Elle</span>' : ''}</span>
+    <span class="barcode-row-svg">${generateBarcodeSVGCompact(code)}</span>
+    <span class="barcode-row-code">${code}</span>
+    <span class="barcode-row-action">
+      ${manual
+        ? `<button type="button" class="admin-btn-icon danger" onclick="resetModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}')" title="Kaldır">🗑</button>`
+        : `<input class="barcode-mini-input" id="${fieldId}" placeholder="Barkod no">
+           <button type="button" class="admin-btn-icon" onclick="saveModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}', '${fieldId}')" title="Ekle">＋</button>`}
+    </span>
   </div>`;
 }
 function toggleBarcodeVariants(id){

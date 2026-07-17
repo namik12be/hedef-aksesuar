@@ -105,6 +105,7 @@ function buildCard(p, i){
   card.style.animationDelay = (i*0.03) + 's';
   const outOfStock = (p.stock !== undefined && p.stock <= 0);
   const lowStock = (p.stock !== undefined && p.stock > 0 && p.stock <= (p.lowStockThreshold || 5));
+  const cannotAddMore = (p.stock !== undefined && remainingStock(p.id) <= 0);
   card.innerHTML = `
     <div class="card-media">
       ${p.tag ? `<span class="tag">${p.tag}</span>` : ''}
@@ -117,7 +118,7 @@ function buildCard(p, i){
       ${lowStock ? `<span class="warn-badge">⚠️ Son ${p.stock} adet</span>` : ''}
       <div class="card-bottom">
         <span class="price">${fmt(p)}</span>
-        <button class="add-btn" aria-label="Sepete ekle" data-id="${p.id}" ${outOfStock ? 'disabled style="opacity:.35;cursor:not-allowed;"' : ''}>
+        <button class="add-btn" aria-label="Sepete ekle" data-id="${p.id}" ${cannotAddMore ? 'disabled style="opacity:.35;cursor:not-allowed;"' : ''}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
       </div>

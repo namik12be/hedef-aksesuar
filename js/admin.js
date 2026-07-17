@@ -192,6 +192,20 @@ function generateBarcodeSVG(code){
     <text x="${totalWidth / 2}" y="${barHeight + 14}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="#1a1a1f">${code}</text>
   </svg>`;
 }
+function generateBarcodeSVGCompact(code){
+  const barHeight = 24;
+  let x = 2;
+  let bars = '';
+  code.split('').forEach((d, i) => {
+    const w = (parseInt(d, 10) % 2) + 1;
+    if(i % 2 === 0){
+      bars += `<rect x="${x}" y="0" width="${w}" height="${barHeight}" fill="currentColor"/>`;
+    }
+    x += w;
+  });
+  const totalWidth = x + 2;
+  return `<svg viewBox="0 0 ${totalWidth} ${barHeight}" height="${barHeight}" xmlns="http://www.w3.org/2000/svg" style="display:block; color:var(--ink); opacity:.8;">${bars}</svg>`;
+}
 function renderVariantBarcodes(){
   const el = document.getElementById('pf_barcodes');
   if(!el) return;
@@ -801,54 +815,56 @@ function renderBarcodeTab(){
       </div>
       <div class="stock-variant-section ${isOpen ? 'open' : ''}">
         ${hasModels ? barcodeModelMatrixHTML(p, columns) : `
-        <div class="barcode-grid">
-          ${p.variants.colors.map((c, i) => barcodeCardHTML(p, 'color', i, c)).join('')}
-          ${(p.variants.patterns || []).map((pt, i) => barcodeCardHTML(p, 'pattern', i, pt)).join('')}
+        <div class="barcode-list">
+          ${p.variants.colors.map((c, i) => barcodeRowHTML(p, 'color', i, c)).join('')}
+          ${(p.variants.patterns || []).map((pt, i) => barcodeRowHTML(p, 'pattern', i, pt)).join('')}
         </div>
         `}
       </div>
     </div>`;
   }).join('');
 }
-function barcodeCardHTML(p, kind, idx, variant){
+function barcodeRowHTML(p, kind, idx, variant){
   const code = variant.barcode || generateBarcodeNumber(p.id, variant.name);
-  const kindLabel = kind === 'color' ? 'Renk' : 'Desen';
+  const dot = kind === 'color' ? `<span class="tag-chip-dot" style="background:${colorHex(variant.name)};"></span>` : '';
   const fieldId = `barcodeManualInput_${p.id}_${kind}_${idx}`;
-  return `<div class="barcode-card">
-    <div class="barcode-label">${kindLabel}: ${variant.name}${variant.barcode ? ' <span class="barcode-manual-tag">Elle eklendi</span>' : ''}</div>
-    ${generateBarcodeSVG(code)}
-    ${variant.barcode
-      ? `<button type="button" class="admin-action-btn danger" onclick="resetProductVariantBarcode(${p.id}, '${kind}', ${idx})">🗑 Kaldır</button>`
-      : `<div class="admin-form-row" style="margin-top:0;">
-          <input class="admin-input" id="${fieldId}" placeholder="Barkod no" style="font-size:12px; padding:8px 10px; min-width:110px;">
-          <button type="button" class="admin-action-btn" onclick="saveManualBarcodeFromField(${p.id}, '${kind}', ${idx})">Ekle</button>
-        </div>`}
+  return `<div class="barcode-row">
+    <span class="barcode-row-name">${dot}${variant.name}${variant.barcode ? '<span class="barcode-manual-tag-mini">Elle</span>' : ''}</span>
+    <span class="barcode-row-svg">${generateBarcodeSVGCompact(code)}</span>
+    <span class="barcode-row-code">${code}</span>
+    <span class="barcode-row-action">
+      ${variant.barcode
+        ? `<button type="button" class="admin-btn-icon danger" onclick="resetProductVariantBarcode(${p.id}, '${kind}', ${idx})" title="Kaldır">🗑</button>`
+        : `<input class="barcode-mini-input" id="${fieldId}" placeholder="Barkod no">
+           <button type="button" class="admin-btn-icon" onclick="saveManualBarcodeFromField(${p.id}, '${kind}', ${idx})" title="Ekle">＋</button>`}
+    </span>
   </div>`;
 }
 function barcodeModelMatrixHTML(p, columns){
   return p.variants.models.map((m, mi) => `
-    <div class="barcode-model-group">
+    <div class="barcode-model-block">
       <div class="stock-variant-group-label">📱 ${m.name}</div>
-      <div class="barcode-grid">
-        ${columns.map((col, ci) => barcodeModelVariantCardHTML(p, mi, m, col, ci)).join('')}
+      <div class="barcode-list">
+        ${columns.map((col, ci) => barcodeModelVariantRowHTML(p, mi, m, col, ci)).join('')}
       </div>
     </div>
   `).join('');
 }
-function barcodeModelVariantCardHTML(p, modelIdx, m, col, colIdx){
+function barcodeModelVariantRowHTML(p, modelIdx, m, col, colIdx){
   const manual = m.variantBarcodes && m.variantBarcodes[col.name];
   const code = manual || generateBarcodeNumber(p.id + '-' + m.name, col.name);
-  const kindLabel = col.type === 'color' ? 'Renk' : 'Desen';
+  const dot = col.type === 'color' ? `<span class="tag-chip-dot" style="background:${colorHex(col.name)};"></span>` : '';
   const fieldId = `barcodeModelInput_${p.id}_${modelIdx}_${colIdx}`;
-  return `<div class="barcode-card">
-    <div class="barcode-label">${kindLabel}: ${col.name}${manual ? ' <span class="barcode-manual-tag">Elle eklendi</span>' : ''}</div>
-    ${generateBarcodeSVG(code)}
-    ${manual
-      ? `<button type="button" class="admin-action-btn danger" onclick="resetModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}')">🗑 Kaldır</button>`
-      : `<div class="admin-form-row" style="margin-top:0;">
-          <input class="admin-input" id="${fieldId}" placeholder="Barkod no" style="font-size:12px; padding:8px 10px; min-width:110px;">
-          <button type="button" class="admin-action-btn" onclick="saveModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}', '${fieldId}')">Ekle</button>
-        </div>`}
+  return `<div class="barcode-row">
+    <span class="barcode-row-name">${dot}${col.name}${manual ? '<span class="barcode-manual-tag-mini">Elle</span>' : ''}</span>
+    <span class="barcode-row-svg">${generateBarcodeSVGCompact(code)}</span>
+    <span class="barcode-row-code">${code}</span>
+    <span class="barcode-row-action">
+      ${manual
+        ? `<button type="button" class="admin-btn-icon danger" onclick="resetModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}')" title="Kaldır">🗑</button>`
+        : `<input class="barcode-mini-input" id="${fieldId}" placeholder="Barkod no">
+           <button type="button" class="admin-btn-icon" onclick="saveModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}', '${fieldId}')" title="Ekle">＋</button>`}
+    </span>
   </div>`;
 }
 function toggleBarcodeVariants(id){
