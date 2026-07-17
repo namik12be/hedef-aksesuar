@@ -38,6 +38,8 @@ function renderAdminAll(){
   renderUserTierManager();
   renderOrders();
   renderRateDisplay();
+  renderSocialLinksForm();
+  renderNewsletterAdminList();
 }
 
 /* ---- Genel Bakış ---- */
@@ -1007,3 +1009,36 @@ document.getElementById('saveManualRateBtn').addEventListener('click', () => {
   renderGrid(); renderFeaturedRows(); updateCart(); renderProductsTable(); renderStats(); renderOrders();
   showToast('Dolar kuru güncellendi.');
 });
+
+function renderSocialLinksForm(){
+  document.getElementById('socialFacebookInput').value = SOCIAL_LINKS.facebook || '';
+  document.getElementById('socialInstagramInput').value = SOCIAL_LINKS.instagram || '';
+  document.getElementById('socialTwitterInput').value = SOCIAL_LINKS.twitter || '';
+}
+document.getElementById('saveSocialLinksBtn').addEventListener('click', () => {
+  SOCIAL_LINKS.facebook = document.getElementById('socialFacebookInput').value.trim();
+  SOCIAL_LINKS.instagram = document.getElementById('socialInstagramInput').value.trim();
+  SOCIAL_LINKS.twitter = document.getElementById('socialTwitterInput').value.trim();
+  renderFooterSocial();
+  showToast('Sosyal medya bağlantıları güncellendi.');
+});
+
+function renderNewsletterAdminList(){
+  const el = document.getElementById('newsletterSubscribersList');
+  if(!el) return;
+  document.getElementById('newsletterCountLabel').textContent = `(${NEWSLETTER_SUBSCRIBERS.length})`;
+  if(NEWSLETTER_SUBSCRIBERS.length === 0){
+    el.innerHTML = `<p class="muted-note">Henüz abone yok.</p>`;
+    return;
+  }
+  el.innerHTML = NEWSLETTER_SUBSCRIBERS.map((s, i) => `
+    <div class="category-row">
+      <span>${s.email} <span class="muted-count">— ${s.date}</span></span>
+      <button class="admin-btn-icon danger" onclick="removeNewsletterSubscriber(${i})" aria-label="Sil">🗑</button>
+    </div>
+  `).join('');
+}
+function removeNewsletterSubscriber(i){
+  NEWSLETTER_SUBSCRIBERS.splice(i, 1);
+  renderNewsletterAdminList();
+}

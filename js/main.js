@@ -7,3 +7,4 @@ renderSidebar();
 renderGrid();
 updateApplyBtnLabel();
 updateCart();
+renderFooterSocial();

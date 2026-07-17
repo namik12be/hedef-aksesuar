@@ -187,3 +187,10 @@ let selectedMarka = 'all';
 let selectedModel = 'all';
 const PRODUCTS_PER_PAGE = 12;
 let currentProductsPage = 1;
+
+let SOCIAL_LINKS = {
+  facebook: '',
+  instagram: '',
+  twitter: '',
+};
+let NEWSLETTER_SUBSCRIBERS = [];

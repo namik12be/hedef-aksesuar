@@ -692,6 +692,17 @@
     display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:32px; padding-bottom:36px;
   }
   .foot-brand p{color:var(--muted); font-size:13.5px; margin-top:10px; max-width:260px; line-height:1.6;}
+  .foot-newsletter{margin-top:20px; max-width:300px;}
+  .foot-newsletter-label{font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; margin-bottom:8px; display:block;}
+  .foot-newsletter-row{display:flex; gap:8px;}
+  .foot-newsletter-row .admin-input{padding:10px 12px; font-size:13.5px;}
+  .foot-newsletter-row .btn{padding:10px 18px; font-size:13.5px; white-space:nowrap;}
+  .foot-social{display:flex; gap:10px; margin-top:18px;}
+  .foot-social-btn{
+    width:34px; height:34px; border-radius:50%; border:1.5px solid var(--line); color:var(--muted);
+    display:flex; align-items:center; justify-content:center; transition:all .15s ease;
+  }
+  .foot-social-btn:hover{border-color:var(--ink); color:var(--red);}
   .foot-cols{display:flex; gap:64px; flex-wrap:wrap;}
   .foot-col h4{font-size:13px; margin-bottom:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
   .foot-col a{display:block; font-size:14px; margin-bottom:10px; font-weight:500;}
