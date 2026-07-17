@@ -788,20 +788,24 @@ function renderBarcodeTab(){
   }
   el.innerHTML = list.map(p => {
     const isOpen = !!barcodeExpanded[p.id];
-    const variantCount = p.variants.colors.length + (p.variants.patterns || []).length;
+    const hasModels = hasModelStockMatrix(p);
+    const columns = modelVariantColumns(p);
+    const variantCount = hasModels ? p.variants.models.length * columns.length : columns.length;
     return `
     <div class="stock-card">
       <div class="stock-card-head clickable" onclick="toggleBarcodeVariants(${p.id})">
         <div class="stock-card-thumb">${p.image ? `<img src="${p.image}">` : '📦'}</div>
         <div class="stock-card-name">${p.name}</div>
-        <span class="muted-count">${variantCount} varyant</span>
+        <span class="muted-count">${variantCount} barkod${hasModels ? ' · ' + p.variants.models.length + ' model' : ''}</span>
         <svg class="stock-chevron ${isOpen ? 'open' : ''}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
       <div class="stock-variant-section ${isOpen ? 'open' : ''}">
+        ${hasModels ? barcodeModelMatrixHTML(p, columns) : `
         <div class="barcode-grid">
           ${p.variants.colors.map((c, i) => barcodeCardHTML(p, 'color', i, c)).join('')}
           ${(p.variants.patterns || []).map((pt, i) => barcodeCardHTML(p, 'pattern', i, pt)).join('')}
         </div>
+        `}
       </div>
     </div>`;
   }).join('');
@@ -818,6 +822,32 @@ function barcodeCardHTML(p, kind, idx, variant){
       : `<div class="admin-form-row" style="margin-top:0;">
           <input class="admin-input" id="${fieldId}" placeholder="Barkod no" style="font-size:12px; padding:8px 10px; min-width:110px;">
           <button type="button" class="admin-action-btn" onclick="saveManualBarcodeFromField(${p.id}, '${kind}', ${idx})">Ekle</button>
+        </div>`}
+  </div>`;
+}
+function barcodeModelMatrixHTML(p, columns){
+  return p.variants.models.map((m, mi) => `
+    <div class="barcode-model-group">
+      <div class="stock-variant-group-label">📱 ${m.name}</div>
+      <div class="barcode-grid">
+        ${columns.map((col, ci) => barcodeModelVariantCardHTML(p, mi, m, col, ci)).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function barcodeModelVariantCardHTML(p, modelIdx, m, col, colIdx){
+  const manual = m.variantBarcodes && m.variantBarcodes[col.name];
+  const code = manual || generateBarcodeNumber(p.id + '-' + m.name, col.name);
+  const kindLabel = col.type === 'color' ? 'Renk' : 'Desen';
+  const fieldId = `barcodeModelInput_${p.id}_${modelIdx}_${colIdx}`;
+  return `<div class="barcode-card">
+    <div class="barcode-label">${kindLabel}: ${col.name}${manual ? ' <span class="barcode-manual-tag">Elle eklendi</span>' : ''}</div>
+    ${generateBarcodeSVG(code)}
+    ${manual
+      ? `<button type="button" class="admin-action-btn danger" onclick="resetModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}')">🗑 Kaldır</button>`
+      : `<div class="admin-form-row" style="margin-top:0;">
+          <input class="admin-input" id="${fieldId}" placeholder="Barkod no" style="font-size:12px; padding:8px 10px; min-width:110px;">
+          <button type="button" class="admin-action-btn" onclick="saveModelVariantBarcode(${p.id}, ${modelIdx}, '${col.name.replace(/'/g, "\\'")}', '${fieldId}')">Ekle</button>
         </div>`}
   </div>`;
 }
@@ -839,6 +869,23 @@ function resetProductVariantBarcode(productId, kind, idx){
   const p = PRODUCTS.find(x => x.id === productId);
   const variant = kind === 'color' ? p.variants.colors[idx] : p.variants.patterns[idx];
   variant.barcode = null;
+  renderBarcodeTab();
+}
+function saveModelVariantBarcode(productId, modelIdx, variantName, fieldId){
+  const input = document.getElementById(fieldId);
+  const val = input.value.trim();
+  if(!val) return;
+  const p = PRODUCTS.find(x => x.id === productId);
+  const m = p.variants.models[modelIdx];
+  if(!m.variantBarcodes) m.variantBarcodes = {};
+  m.variantBarcodes[variantName] = val;
+  renderBarcodeTab();
+  showToast('Barkod eklendi — otomatik oluşturulanın yerine geçti.');
+}
+function resetModelVariantBarcode(productId, modelIdx, variantName){
+  const p = PRODUCTS.find(x => x.id === productId);
+  const m = p.variants.models[modelIdx];
+  if(m.variantBarcodes) delete m.variantBarcodes[variantName];
   renderBarcodeTab();
 }
 document.getElementById('barcodeSearchInput').addEventListener('input', (e) => {

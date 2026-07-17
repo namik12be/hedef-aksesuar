@@ -21,14 +21,6 @@ function deviceLabel(key){
   return {telefon:"Telefon", tablet:"Tablet", airpods:"AirPods", saat:"Apple Watch", kulaklik:"Kulaklık"}[key] || key;
 }
 
-function modelLabel(modelKey){
-  for(const m of MARKALAR){
-    const found = m.models.find(x => x.key === modelKey);
-    if(found) return found.label;
-  }
-  return modelKey;
-}
-
 function renderMarkaChips(){
   const el = document.getElementById('markaChips');
   el.innerHTML = `<button class="chip ${selectedMarka==='all' ? 'active' : ''}" data-marka="all">Tümü</button>` +
@@ -111,7 +103,6 @@ function buildCard(p, i){
   const card = document.createElement('div');
   card.className = 'card';
   card.style.animationDelay = (i*0.03) + 's';
-  const compat = p.universal ? 'Tüm modellerle uyumlu' : (p.models ? p.models.map(modelLabel).join(', ') : '');
   const outOfStock = (p.stock !== undefined && p.stock <= 0);
   const lowStock = (p.stock !== undefined && p.stock > 0 && p.stock <= (p.lowStockThreshold || 5));
   card.innerHTML = `
@@ -123,7 +114,6 @@ function buildCard(p, i){
     <div class="card-body">
       <span class="card-cat" style="background:${categoryAccentBg(p.brand)}; color:${categoryAccentFg(p.brand)}; padding:4px 10px; border-radius:100px; display:inline-block; width:fit-content;">${brandLabel(p.brand)} · ${deviceLabel(p.device)}</span>
       <span class="card-name">${p.name}</span>
-      ${compat ? `<span class="compat-badge">${compat}</span>` : ''}
       ${lowStock ? `<span class="warn-badge">⚠️ Son ${p.stock} adet</span>` : ''}
       <div class="card-bottom">
         <span class="price">${fmt(p)}</span>
