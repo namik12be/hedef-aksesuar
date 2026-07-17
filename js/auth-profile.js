@@ -60,6 +60,13 @@ function renderProfileView(){
         <span class="profile-role-badge ${currentUser.role === 'admin' ? 'admin' : ''}">${currentUser.role === 'admin' ? 'Yönetici' : 'Müşteri'}</span>
       </div>
     </div>
+    <div class="theme-switch-card">
+      <div>
+        <div class="theme-switch-label">Görünüm</div>
+        <div class="theme-switch-sub">Siteyi açık ya da koyu temada kullan.</div>
+      </div>
+      <div class="theme-toggle" id="themeToggle"></div>
+    </div>
     <div class="profile-layout">
       <nav class="profile-menu" id="profileMenu">
         ${ACCOUNT_MENU.map(item => `
@@ -86,6 +93,8 @@ function renderProfileView(){
     activeAccountSection = btn.dataset.section;
     renderProfileView();
   });
+
+  renderThemeToggle();
 
   document.getElementById('profilePhotoInput').addEventListener('change', (e) => {
     const file = e.target.files[0];

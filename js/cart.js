@@ -1,4 +1,14 @@
+function remainingStock(productId){
+  const p = PRODUCTS.find(x => x.id === productId);
+  if(!p) return 0;
+  return Math.max(0, p.stock - (cart[productId] || 0));
+}
+
 function addToCart(id){
+  if(remainingStock(id) <= 0){
+    showToast('Stok tükendi — bu üründen daha fazla ekleyemezsin.');
+    return;
+  }
   cart[id] = (cart[id] || 0) + 1;
   updateCart();
   showToast('Sepete eklendi');
@@ -6,6 +16,10 @@ function addToCart(id){
 
 function changeQty(id, delta){
   if(!cart[id]) return;
+  if(delta > 0 && remainingStock(id) <= 0){
+    showToast('Stok tükendi — bu üründen daha fazla ekleyemezsin.');
+    return;
+  }
   cart[id] += delta;
   if(cart[id] <= 0) delete cart[id];
   updateCart();
@@ -48,11 +62,12 @@ function updateCart(){
           <div class="qty-row">
             <button class="qty-btn" onclick="changeQty(${id}, -1)">−</button>
             <span class="qty-val">${qty}</span>
-            <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+            <button class="qty-btn" ${qty >= p.stock ? 'disabled style="opacity:.35;cursor:not-allowed;"' : ''} onclick="changeQty(${id}, 1)">+</button>
             <button class="remove-btn" onclick="removeItem(${id})" aria-label="Ürünü kaldır">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
             </button>
           </div>
+          ${qty >= p.stock ? '<span class="cart-stock-warning">Stok sınırına ulaşıldı</span>' : ''}
         </div>
       </div>`;
   }).join('');

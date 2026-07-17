@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('hedefAksesuarTheme')||'system';var dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hedef Aksesuar — Telefon Kılıfı ve Aksesuar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +21,7 @@
       <a href="#iletisim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>İletişim</a>
     </nav>
     <div class="nav-right">
+      <button class="admin-exit-btn" id="adminExitBtn" data-goto="home">← Panelden Çık</button>
       <button class="icon-btn" id="accountBtn" data-goto="profile" aria-label="Hesabım">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span id="accountBtnLabel"></span>
@@ -156,11 +158,8 @@
   </div>
 
   <div id="adminDashboard" style="display:none;">
-    <div class="admin-topbar">
-      <div class="wrap admin-topbar-inner">
-        <div class="admin-title">Hedef Aksesuar <span>Yönetici Paneli</span></div>
-        <button class="btn btn-ghost" data-goto="home">← Yönetici Panelinden Çık</button>
-      </div>
+    <div class="wrap admin-mini-bar">
+      <span class="admin-mini-label">Yönetici Paneli</span>
     </div>
 
     <div class="wrap">

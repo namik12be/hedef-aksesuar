@@ -27,6 +27,7 @@ function currentMainView(){
 function showProductDetail(id){
   const p = PRODUCTS.find(x => x.id === id);
   if(!p) return;
+  document.body.classList.remove('admin-mode');
   pdReturnView = currentMainView();
   pdProductId = id;
   pdSelectedColor = p.variants.colors[0] ? p.variants.colors[0].name : null;
@@ -97,14 +98,21 @@ function selectPdColor(c){ pdSelectedColor = c; renderProductDetail(); }
 function selectPdPattern(pt){ pdSelectedPattern = pt; renderProductDetail(); }
 function selectPdModel(m){ pdSelectedModelVariant = m; renderProductDetail(); }
 function changePdQty(delta){
-  pdQty = Math.max(1, pdQty + delta);
+  const max = Math.max(1, remainingStock(pdProductId));
+  pdQty = Math.min(max, Math.max(1, pdQty + delta));
   document.getElementById('pdQtyVal').textContent = pdQty;
 }
 function addPdToCart(){
   const p = PRODUCTS.find(x => x.id === pdProductId);
-  cart[p.id] = (cart[p.id] || 0) + pdQty;
+  const remaining = remainingStock(p.id);
+  if(remaining <= 0){
+    showToast('Stok tükendi — bu üründen daha fazla ekleyemezsin.');
+    return;
+  }
+  const qtyToAdd = Math.min(pdQty, remaining);
+  cart[p.id] = (cart[p.id] || 0) + qtyToAdd;
   updateCart();
-  let label = 'Sepete eklendi';
+  let label = qtyToAdd < pdQty ? `Stok yetersiz, sadece ${qtyToAdd} adet eklendi` : 'Sepete eklendi';
   const variantBits = [pdSelectedColor, pdSelectedModelVariant].filter(Boolean);
   if(variantBits.length) label += ` (${variantBits.join(', ')})`;
   showToast(label);
