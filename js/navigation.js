@@ -156,7 +156,10 @@ document.getElementById('newsletterSubscribeBtn').addEventListener('click', () =
     showToast('Bu e-posta zaten kayıtlı.');
     return;
   }
-  NEWSLETTER_SUBSCRIBERS.push({email, date: new Date().toLocaleDateString('tr-TR')});
+  const subscribedDate = new Date().toLocaleDateString('tr-TR');
+  NEWSLETTER_SUBSCRIBERS.push({email, date: subscribedDate});
+  supabaseClient.from('newsletter_subscribers').insert({email, subscribed_date: subscribedDate})
+    .then(({error}) => { if(error) console.error('Supabase bülten kayıt hatası:', error.message); });
   input.value = '';
   showToast('Bültenimize katıldığın için teşekkürler!');
   if(document.getElementById('newsletterSubscribersList')) renderNewsletterAdminList();

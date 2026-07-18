@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 
@@ -443,6 +443,13 @@
   </div>
   <div class="drawer-items" style="padding:20px 24px;">
     <div class="admin-card">
+      <h3>Veritabanı Bağlantısı</h3>
+      <p class="muted-note">Değişiklikleriniz artık Supabase üzerinden tüm ziyaretçilerle paylaşılıyor.</p>
+      <div id="supabaseSyncStatus" class="muted-note" style="margin-bottom:10px;">Yükleniyor…</div>
+      <button class="btn btn-ghost" id="seedSupabaseBtn">İlk Kurulum: Verileri Supabase'e Aktar</button>
+    </div>
+
+    <div class="admin-card">
       <h3>Dolar Kuru</h3>
       <p class="muted-note">Bayi ve Servis gibi dolar bazlı ünvanlar için kullanılan kur budur. Sayfa açıldığında canlı kur çekilmeye çalışılır; başarısız olursa aşağıdaki değer kullanılır.</p>
       <div id="rateDisplay" style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; margin-bottom:14px;"></div>
@@ -485,15 +492,17 @@
 
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
-<script src="js/data.js?v=6"></script>
-<script src="js/utils.js?v=6"></script>
-<script src="js/shop.js?v=6"></script>
-<script src="js/cart.js?v=6"></script>
-<script src="js/navigation.js?v=6"></script>
-<script src="js/auth-profile.js?v=6"></script>
-<script src="js/product-detail.js?v=6"></script>
-<script src="js/admin.js?v=6"></script>
-<script src="js/main.js?v=6"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/data.js?v=7"></script>
+<script src="js/utils.js?v=7"></script>
+<script src="js/shop.js?v=7"></script>
+<script src="js/cart.js?v=7"></script>
+<script src="js/navigation.js?v=7"></script>
+<script src="js/auth-profile.js?v=7"></script>
+<script src="js/product-detail.js?v=7"></script>
+<script src="js/admin.js?v=7"></script>
+<script src="js/supabase-sync.js?v=7"></script>
+<script src="js/main.js?v=7"></script>
 
 </body>
 </html>

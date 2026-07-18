@@ -1,6 +1,6 @@
 /* ============================= ADMIN PANEL ============================= */
 
-document.getElementById('adminLoginBtn').addEventListener('click', () => {
+document.getElementById('adminLoginBtn').addEventListener('click', async () => {
   const val = document.getElementById('adminPasswordInput').value;
   if(val === ADMIN_PASSWORD){
     adminUnlocked = true;
@@ -8,6 +8,7 @@ document.getElementById('adminLoginBtn').addEventListener('click', () => {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
     renderAdminAll();
+    await adminSupabaseSignIn();
   } else {
     document.getElementById('adminLoginError').style.display = 'block';
   }
@@ -1116,6 +1117,7 @@ document.getElementById('saveManualRateBtn').addEventListener('click', () => {
   if(!val || val <= 0) return;
   usdRate = val;
   usdRateSource = 'manuel olarak ayarlandı';
+  window.usdRateManual = true;
   renderRateDisplay();
   renderGrid(); renderFeaturedRows(); updateCart(); renderProductsTable(); renderStats(); renderOrders();
   showToast('Dolar kuru güncellendi.');

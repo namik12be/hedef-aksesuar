@@ -9,3 +9,4 @@ renderGrid();
 updateApplyBtnLabel();
 updateCart();
 renderFooterSocial();
+loadAllFromSupabase();
