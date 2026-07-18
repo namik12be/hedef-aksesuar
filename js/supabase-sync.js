@@ -109,37 +109,41 @@ async function loadAllFromSupabase(){
 
     let loadedFromRemote = false;
 
-    if(productsRes.data && productsRes.data.length){
+    // Not: bir tablo başarıyla okunduysa (hata yoksa) Supabase'deki hal esas alınır —
+    // boş dizi dönmesi "henüz veri yok" değil, "admin hepsini sildi" anlamına da gelebilir.
+    if(!productsRes.error){
       PRODUCTS.length = 0;
-      productsRes.data.forEach(r => PRODUCTS.push(rowToProduct(r)));
-      nextProductId = Math.max(...PRODUCTS.map(p => p.id)) + 1;
+      (productsRes.data || []).forEach(r => PRODUCTS.push(rowToProduct(r)));
+      nextProductId = PRODUCTS.length ? Math.max(...PRODUCTS.map(p => p.id)) + 1 : 1;
       loadedFromRemote = true;
     }
-    if(categoriesRes.data && categoriesRes.data.length){
+    if(!categoriesRes.error){
       CATEGORIES.length = 0;
-      categoriesRes.data.forEach(r => CATEGORIES.push(rowToCategory(r)));
+      (categoriesRes.data || []).forEach(r => CATEGORIES.push(rowToCategory(r)));
     }
-    if(brandsRes.data && brandsRes.data.length){
+    if(!brandsRes.error){
       MARKALAR.length = 0;
-      brandsRes.data.forEach(r => MARKALAR.push(rowToBrand(r)));
+      (brandsRes.data || []).forEach(r => MARKALAR.push(rowToBrand(r)));
       Object.keys(MODEL_TO_MARKA).forEach(k => delete MODEL_TO_MARKA[k]);
       MARKALAR.forEach(m => m.models.forEach(md => MODEL_TO_MARKA[md.key] = m.key));
     }
-    if(deviceTypesRes.data && deviceTypesRes.data.length){
+    if(!deviceTypesRes.error){
       DEVICE_TYPES.length = 0;
-      deviceTypesRes.data.forEach(r => DEVICE_TYPES.push(rowToDeviceType(r)));
+      (deviceTypesRes.data || []).forEach(r => DEVICE_TYPES.push(rowToDeviceType(r)));
     }
-    if(tiersRes.data && tiersRes.data.length){
+    // Fiyat kademeleri site genelinde fiyat hesaplamasının temeli olduğu için,
+    // burada boş dönmesi bir hatayı yansıtıyor olabilir — güvenli tarafta kalıp yerel varsayılanı koruyoruz.
+    if(!tiersRes.error && tiersRes.data && tiersRes.data.length){
       PRICE_TIERS.length = 0;
       tiersRes.data.forEach(r => PRICE_TIERS.push(rowToTier(r)));
     }
-    if(ordersRes.data && ordersRes.data.length){
+    if(!ordersRes.error){
       ORDERS.length = 0;
-      ordersRes.data.forEach(r => ORDERS.push(rowToOrder(r)));
+      (ordersRes.data || []).forEach(r => ORDERS.push(rowToOrder(r)));
     }
-    if(newsletterRes.data){
+    if(!newsletterRes.error){
       NEWSLETTER_SUBSCRIBERS.length = 0;
-      newsletterRes.data.forEach(r => NEWSLETTER_SUBSCRIBERS.push(rowToNewsletter(r)));
+      (newsletterRes.data || []).forEach(r => NEWSLETTER_SUBSCRIBERS.push(rowToNewsletter(r)));
     }
     if(userTiersRes.data){
       userTiersRes.data.forEach(r => {
