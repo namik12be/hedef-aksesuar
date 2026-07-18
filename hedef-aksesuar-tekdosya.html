@@ -814,6 +814,8 @@
     display:flex; flex-direction:column; box-shadow:-20px 0 50px rgba(0,0,0,0.15);
   }
   .drawer.open{transform:translateX(0);}
+  .drawer-left{right:auto; left:0; transform:translateX(-100%); box-shadow:20px 0 50px rgba(0,0,0,0.15);}
+  .drawer-left.open{transform:translateX(0);}
   .drawer-head{
     display:flex; justify-content:space-between; align-items:center; padding:22px 24px; border-bottom:1px solid var(--line);
   }
@@ -1323,7 +1325,7 @@
 </aside>
 
 <div class="overlay" id="settingsOverlay"></div>
-<aside class="drawer" id="settingsDrawer">
+<aside class="drawer drawer-left" id="settingsDrawer">
   <div class="drawer-head">
     <h3>Site Ayarları</h3>
     <button class="icon-btn" id="closeSettingsDrawer" aria-label="Ayarları kapat">
