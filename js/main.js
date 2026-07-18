@@ -1,3 +1,4 @@
+restoreUserSession();
 renderFeaturedRows();
 updateAccountButton();
 renderMarkaChips();

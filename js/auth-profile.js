@@ -313,6 +313,31 @@ function normalizeTr(s){
     .replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c');
 }
 
+const SESSION_STORAGE_KEY = 'hedefAksesuarSession';
+const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 gün boyunca oturum açık kalır
+function saveUserSession(user){
+  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({username: user.username, expiresAt: Date.now() + SESSION_DURATION_MS}));
+}
+function clearUserSession(){
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+}
+function restoreUserSession(){
+  try{
+    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+    if(!raw) return;
+    const session = JSON.parse(raw);
+    if(!session || !session.username || !session.expiresAt || Date.now() > session.expiresAt){
+      clearUserSession();
+      return;
+    }
+    const user = USERS.find(u => u.username === session.username);
+    if(user){
+      currentUser = user;
+      saveUserSession(user);
+    }
+  }catch(e){}
+}
+
 document.getElementById('loginSubmitBtn').addEventListener('click', () => {
   const idf = document.getElementById('loginIdentifier').value.trim();
   const idNorm = normalizeTr(idf);
@@ -325,6 +350,7 @@ document.getElementById('loginSubmitBtn').addEventListener('click', () => {
   const pwd = document.getElementById('loginPassword').value;
   if(user && user.password === pwd){
     currentUser = user;
+    saveUserSession(user);
     document.getElementById('loginError').style.display = 'none';
     document.getElementById('loginIdentifier').value = '';
     document.getElementById('loginPassword').value = '';
@@ -355,6 +381,7 @@ document.getElementById('registerSubmitBtn').addEventListener('click', () => {
   const newUser = {username, displayName:name, email, phone, password, role:'customer', photo:null, addresses:[], tierId:'uye'};
   USERS.push(newUser);
   currentUser = newUser;
+  saveUserSession(newUser);
   errEl.style.display = 'none';
   renderProfileView();
   showToast(`Kayıt başarılı, hoş geldin ${name}!`);
@@ -367,6 +394,7 @@ function googleMockLogin(){
     USERS.push(guser);
   }
   currentUser = guser;
+  saveUserSession(guser);
   renderProfileView();
   showToast('Google ile giriş yapıldı (demo — gerçek Google bağlantısı değildir).');
 }
@@ -376,6 +404,7 @@ document.getElementById('googleRegisterBtn').addEventListener('click', googleMoc
 function logout(){
   currentUser = null;
   adminUnlocked = false;
+  clearUserSession();
   renderProfileView();
   showToast('Çıkış yapıldı');
 }

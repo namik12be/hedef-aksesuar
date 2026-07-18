@@ -25,6 +25,54 @@ document.getElementById('adminTabs').addEventListener('click', (e) => {
   document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
 });
 
+/* ---- Site Ayarları (hamburger menü) ---- */
+function openSettingsDrawer(){
+  document.getElementById('adminMenuBtn').classList.add('open');
+  document.getElementById('settingsDrawer').classList.add('open');
+  document.getElementById('settingsOverlay').classList.add('open');
+}
+function closeSettingsDrawer(){
+  document.getElementById('adminMenuBtn').classList.remove('open');
+  document.getElementById('settingsDrawer').classList.remove('open');
+  document.getElementById('settingsOverlay').classList.remove('open');
+}
+document.getElementById('adminMenuBtn').addEventListener('click', () => {
+  const isOpen = document.getElementById('settingsDrawer').classList.contains('open');
+  if(isOpen) closeSettingsDrawer(); else openSettingsDrawer();
+});
+document.getElementById('closeSettingsDrawer').addEventListener('click', closeSettingsDrawer);
+document.getElementById('settingsOverlay').addEventListener('click', closeSettingsDrawer);
+
+/* ---- Kategoriler & Markalar alt sekmeleri ---- */
+document.getElementById('katalogSubNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  document.querySelectorAll('#katalogSubNav .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const sub = btn.dataset.katalogsub;
+  document.getElementById('katalogSubKategoriler').style.display = sub === 'kategoriler' ? 'block' : 'none';
+  document.getElementById('katalogSubMarkalar').style.display = sub === 'markalar' ? 'block' : 'none';
+});
+document.getElementById('toggleNewCategoryBtn').addEventListener('click', () => {
+  const row = document.getElementById('newCategoryRow');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+});
+document.getElementById('toggleNewBrandBtn').addEventListener('click', () => {
+  const row = document.getElementById('newBrandRow');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+});
+
+/* ---- Ünvanlar ve Fiyat Kademeleri alt sekmeleri ---- */
+document.getElementById('fiyatSubNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  document.querySelectorAll('#fiyatSubNav .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const sub = btn.dataset.fiyatsub;
+  document.getElementById('fiyatSubKademeler').style.display = sub === 'kademeler' ? 'block' : 'none';
+  document.getElementById('fiyatSubKullanicilar').style.display = sub === 'kullanicilar' ? 'block' : 'none';
+});
+
 function renderAdminAll(){
   renderStats();
   renderLowStockList();
