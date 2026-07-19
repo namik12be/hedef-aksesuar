@@ -179,7 +179,6 @@ function renderPfColorChips(){
       <button type="button" onclick="removePfColor(${i})">✕</button>
     </span>
   `).join('');
-  renderVariantBarcodes();
 }
 function removePfColor(i){ pfColors.splice(i, 1); renderPfColorChips(); }
 
@@ -191,7 +190,6 @@ function renderPfPatternChips(){
       <button type="button" onclick="removePfPattern(${i})">✕</button>
     </span>
   `).join('');
-  renderVariantBarcodes();
 }
 function removePfPattern(i){ pfPatterns.splice(i, 1); renderPfPatternChips(); }
 
@@ -226,23 +224,6 @@ function generateBarcodeNumber(productId, variantName){
   const hash = simpleHash(productId + '-' + variantName);
   return '869' + String(hash).padStart(10, '0').slice(0, 10);
 }
-function generateBarcodeSVG(code){
-  const barHeight = 46;
-  let x = 4;
-  let bars = '';
-  code.split('').forEach((d, i) => {
-    const w = (parseInt(d, 10) % 3) + 1;
-    if(i % 2 === 0){
-      bars += `<rect x="${x}" y="0" width="${w}" height="${barHeight}" fill="#1a1a1f"/>`;
-    }
-    x += w;
-  });
-  const totalWidth = x + 4;
-  return `<svg viewBox="0 0 ${totalWidth} ${barHeight + 18}" width="100%" height="64" xmlns="http://www.w3.org/2000/svg" style="max-width:220px;">
-    ${bars}
-    <text x="${totalWidth / 2}" y="${barHeight + 14}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="#1a1a1f">${code}</text>
-  </svg>`;
-}
 function generateBarcodeSVGCompact(code){
   const barHeight = 24;
   let x = 2;
@@ -257,72 +238,14 @@ function generateBarcodeSVGCompact(code){
   const totalWidth = x + 2;
   return `<svg viewBox="0 0 ${totalWidth} ${barHeight}" height="${barHeight}" xmlns="http://www.w3.org/2000/svg" style="display:block; color:var(--ink); opacity:.8;">${bars}</svg>`;
 }
-function renderVariantBarcodes(){
-  const el = document.getElementById('pf_barcodes');
-  if(!el) return;
-  populateBarcodeVariantSelect();
-  const idForCode = pfEditingProductId || 'yeni';
-  const allVariants = [
-    ...pfColors.map(c => ({name: c.name, kind: 'Renk', kindKey: 'color', manual: c.barcode})),
-    ...pfPatterns.map(p => ({name: p.name, kind: 'Desen', kindKey: 'pattern', manual: p.barcode})),
-  ];
-  if(allVariants.length === 0){
-    el.innerHTML = `<p class="muted-note" style="margin:0;">Barkod oluşturmak için önce bir renk veya desen ekle.</p>`;
-    return;
-  }
-  el.innerHTML = allVariants.map(v => {
-    const code = v.manual || generateBarcodeNumber(idForCode, v.name);
-    return `<div class="barcode-card">
-      <div class="barcode-label">${v.kind}: ${v.name}${v.manual ? ' <span class="barcode-manual-tag">Elle eklendi</span>' : ''}</div>
-      ${generateBarcodeSVG(code)}
-      ${v.manual ? `<button type="button" class="admin-action-btn danger" onclick="resetVariantBarcode('${v.kindKey}','${v.name.replace(/'/g, "\\'")}')">🗑 Kaldır</button>` : ''}
-    </div>`;
-  }).join('');
-}
-function populateBarcodeVariantSelect(){
-  const el = document.getElementById('pf_barcode_variant_select');
-  if(!el) return;
-  const options = [
-    ...pfColors.map(c => ({label: 'Renk: ' + c.name, name: c.name, kind: 'color'})),
-    ...pfPatterns.map(p => ({label: 'Desen: ' + p.name, name: p.name, kind: 'pattern'})),
-  ];
-  if(options.length === 0){
-    el.innerHTML = '<option value="">Önce renk/desen ekle</option>';
-    el.disabled = true;
-    return;
-  }
-  el.disabled = false;
-  el.innerHTML = options.map(o => `<option value="${o.kind}::${o.name}">${o.label}</option>`).join('');
-}
-function addManualBarcode(){
-  const sel = document.getElementById('pf_barcode_variant_select').value;
-  const code = document.getElementById('pf_barcode_input').value.trim();
-  if(!sel || !code) return;
-  const [kind, name] = sel.split('::');
-  const list = kind === 'color' ? pfColors : pfPatterns;
-  const item = list.find(x => x.name === name);
-  if(item) item.barcode = code;
-  document.getElementById('pf_barcode_input').value = '';
-  renderVariantBarcodes();
-  showToast('Barkod eklendi — otomatik oluşturulan barkodun yerine geçti.');
-}
-function resetVariantBarcode(kind, name){
-  const list = kind === 'color' ? pfColors : pfPatterns;
-  const item = list.find(x => x.name === name);
-  if(item) item.barcode = null;
-  renderVariantBarcodes();
-}
-
 function renderPfModelChips(){
   document.getElementById('pf_models_chips').innerHTML = pfModelVariants.map((m, i) => `
     <span class="tag-chip model-chip-added">
       ${m.name}
-      <span class="model-stock-input"><input type="number" value="${m.stock}" min="0" onchange="setPfModelStock(${i}, this.value)" title="Stok"></span>
       <button type="button" onclick="removePfModelVariant(${i})">✕</button>
     </span>
   `).join('');
 }
-function setPfModelStock(i, val){ pfModelVariants[i].stock = parseInt(val) || 0; }
 function removePfModelVariant(i){
   pfModelVariants.splice(i, 1);
   renderPfModelChips();
@@ -425,23 +348,13 @@ function openProductEditor(productId){
         </div>
       </div>
       <div style="margin-top:16px;">
-        <label>Varyant Barkodları</label>
-        <p class="muted-note" style="margin:0 0 10px;">Her renk ve desen için otomatik bir barkod oluşturulur. Ürün tedarikçiden hazır barkodlu geldiyse, hangi renk/deseni olduğunu seçip kendi barkodunu ekleyebilirsin — otomatik oluşturulanın yerine geçer.</p>
-        <div class="admin-form-row" style="margin-top:0;">
-          <select class="admin-input" id="pf_barcode_variant_select" style="max-width:200px;"></select>
-          <input class="admin-input" id="pf_barcode_input" placeholder="Barkod numarası">
-          <button class="btn btn-ghost" id="pf_add_barcode_btn">+ Barkod Ekle</button>
-        </div>
-        <div id="pf_barcodes" class="barcode-grid" style="margin-top:14px;"></div>
-      </div>
-      <div style="margin-top:16px;">
         <label>Model Varyantları</label>
-        <p class="muted-note" style="margin:0 0 10px;">Önce bir marka seç — o markanın, seçtiğin cihaz tipine uygun modelleri çıkacak. Modele tıklayınca ekleniyor ve aşağıdaki listeye taşınıyor.</p>
+        <p class="muted-note" style="margin:0 0 10px;">Önce bir marka seç — o markanın, seçtiğin cihaz tipine uygun modelleri çıkacak. Modele tıklayınca ekleniyor ve aşağıdaki listeye taşınıyor. Stok girişi "Stok" sekmesinden yapılır.</p>
         <div class="tag-input-box">
           <div class="chip-row" id="pf_marka_picker"></div>
           <div class="chip-row" id="pf_model_options" style="margin-top:10px;"></div>
         </div>
-        <p class="muted-note" style="margin:14px 0 8px;">Eklenen modeller (stok girebilirsin):</p>
+        <p class="muted-note" style="margin:14px 0 8px;">Eklenen modeller:</p>
         <div class="tag-chip-row" id="pf_models_chips"></div>
       </div>
       <div style="margin-top:16px;">
@@ -488,7 +401,6 @@ function openProductEditor(productId){
     }
   });
   document.getElementById('pf_device').addEventListener('change', renderPfModelOptions);
-  document.getElementById('pf_add_barcode_btn').addEventListener('click', addManualBarcode);
 
   document.getElementById('pf_image').addEventListener('change', (e) => {
     const file = e.target.files[0];

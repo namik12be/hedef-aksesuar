@@ -513,12 +513,6 @@
   .model-chip-added{background:#EEF2FF; border:1px solid #DCE4FF;}
   .model-chip-available{background:var(--surface);}
   .model-chip-available:hover{background:var(--bg-soft); border-color:var(--ink);}
-  .model-stock-input{display:inline-flex; align-items:center;}
-  .model-stock-input input{
-    width:46px; padding:3px 5px; border-radius:6px; border:1px solid var(--line); font-size:11.5px;
-    font-family:'IBM Plex Mono',monospace; text-align:center; background:var(--surface);
-  }
-  .model-stock-input input:focus{outline:none; border-color:var(--blue);}
   .variant-photo-btn{
     width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
     color:var(--muted); font-size:11px; transition:all .15s ease; background:transparent;
@@ -527,16 +521,6 @@
   .variant-photo-btn.has-photo{background:#EAF7EC; color:#1E7B34;}
   .variant-photo-btn.has-photo:hover{background:var(--blue); color:#fff;}
 
-  .barcode-grid{display:flex; flex-wrap:wrap; gap:14px;}
-  .barcode-card{
-    border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--surface);
-    display:flex; flex-direction:column; align-items:center; gap:8px; min-width:180px;
-  }
-  .barcode-label{font-size:12px; font-weight:700; color:var(--ink); text-align:center;}
-  .barcode-manual-tag{
-    display:inline-block; font-size:10px; font-weight:700; color:var(--status-green-text); background:var(--status-green-bg);
-    padding:2px 7px; border-radius:100px; text-transform:uppercase; letter-spacing:.02em;
-  }
 
   /* Barkodlar sekmesi — sıkı satır düzeni (model + desen ön planda, barkod görseli ikincil) */
   .barcode-model-block{padding:12px 0; border-bottom:1px dashed var(--line);}
