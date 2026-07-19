@@ -35,7 +35,24 @@ if(window.matchMedia){
   });
 }
 
+const LAST_VIEW_KEY = 'hedefAksesuarLastView';
+function saveLastView(view, extra){
+  try { sessionStorage.setItem(LAST_VIEW_KEY, JSON.stringify({view, extra: extra || null})); } catch(e){}
+}
+function restoreLastView(){
+  try {
+    const raw = sessionStorage.getItem(LAST_VIEW_KEY);
+    if(!raw) return;
+    const {view, extra} = JSON.parse(raw);
+    if(view === 'products') showProducts();
+    else if(view === 'admin') showAdmin();
+    else if(view === 'profile') showProfile();
+    else if(view === 'productDetail' && extra) showProductDetail(extra);
+  } catch(e){}
+}
+
 function showHome(){
+  saveLastView('home');
   document.body.classList.remove('admin-mode');
   document.getElementById('homeView').style.display = 'block';
   document.getElementById('productsView').style.display = 'none';
@@ -45,6 +62,7 @@ function showHome(){
   window.scrollTo(0, 0);
 }
 function showProducts(){
+  saveLastView('products');
   document.body.classList.remove('admin-mode');
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('productsView').style.display = 'block';
@@ -54,6 +72,7 @@ function showProducts(){
   window.scrollTo(0, 0);
 }
 function showAdmin(){
+  saveLastView('admin');
   document.body.classList.remove('admin-mode');
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('productsView').style.display = 'none';
@@ -72,6 +91,7 @@ function showAdmin(){
   }
 }
 function showProfile(){
+  saveLastView('profile');
   document.body.classList.remove('admin-mode');
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('productsView').style.display = 'none';

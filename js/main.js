@@ -1,5 +1,6 @@
 restoreUserSession();
-restoreAdminSession();
+restoreAdminAuthState();
+restoreLastView();
 renderFeaturedRows();
 updateAccountButton();
 renderMarkaChips();

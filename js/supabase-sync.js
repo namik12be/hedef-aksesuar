@@ -199,7 +199,9 @@ function saveAdminSession(){
 function clearAdminSession(){
   localStorage.removeItem(ADMIN_SESSION_KEY);
 }
-async function restoreAdminSession(){
+/* ---- Sadece "hedef2026 gerekmeden yazma izni var mı" durumunu geri yükler —
+   hangi görünümün gösterileceğine karışmaz, bunu navigation.js'teki restoreLastView() yapar. ---- */
+async function restoreAdminAuthState(){
   try {
     const raw = localStorage.getItem(ADMIN_SESSION_KEY);
     if(!raw) return;
@@ -207,7 +209,6 @@ async function restoreAdminSession(){
     if(!session.expiresAt || session.expiresAt < Date.now()){ clearAdminSession(); return; }
     adminUnlocked = true;
     saveAdminSession();
-    showAdmin();
     await adminSupabaseSignIn();
   } catch(e){
     clearAdminSession();

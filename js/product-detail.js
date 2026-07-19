@@ -27,6 +27,7 @@ function currentMainView(){
 function showProductDetail(id){
   const p = PRODUCTS.find(x => x.id === id);
   if(!p) return;
+  saveLastView('productDetail', id);
   document.body.classList.remove('admin-mode');
   pdReturnView = currentMainView();
   pdProductId = id;
