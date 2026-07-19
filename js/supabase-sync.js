@@ -170,26 +170,15 @@ async function loadAllFromSupabase(){
     renderFeaturedRows(); renderMarkaChips(); renderModelChips(); renderSidebar(); renderGrid();
     updateCart(); renderFooterSocial();
     if(typeof renderRateDisplay === 'function') renderRateDisplay();
-    renderSupabaseSyncStatus(loadedFromRemote);
+    if(adminUnlocked && document.getElementById('adminDashboard').style.display !== 'none') renderAdminAll();
   } catch(e){
     console.error('Supabase veri yükleme hatası:', e);
-    renderSupabaseSyncStatus(false, true);
   }
 }
 
-function renderSupabaseSyncStatus(loadedFromRemote, failed){
-  const el = document.getElementById('supabaseSyncStatus');
-  if(!el) return;
-  if(failed){
-    el.textContent = 'Supabase bağlantısı kurulamadı — geçici olarak yerel örnek veriler gösteriliyor.';
-  } else if(loadedFromRemote){
-    el.textContent = `Bağlı — veriler Supabase'den yüklendi (${PRODUCTS.length} ürün).`;
-  } else {
-    el.textContent = 'Supabase\'de henüz veri yok — aşağıdaki butonla mevcut örnek verileri bir kez aktarabilirsin.';
-  }
-}
-
-/* ---- Admin panelinde herhangi bir değişiklik yapıldığında, kısa bir gecikmeyle tüm tabloları eşitle ---- */
+/* ---- Belirli bir düzenleme fonksiyonu veriyi gerçekten değiştirdiğinde çağrılır
+   (bkz. admin.js içindeki ekleme/düzenleme/stok/barkod fonksiyonlarının sonu).
+   Böylece "kaydedildi" bildirimi sadece gerçek bir değişiklik olduğunda çıkar. ---- */
 let supabaseSyncTimer = null;
 function scheduleSupabaseSync(){
   if(!adminUnlocked) return;
@@ -197,20 +186,31 @@ function scheduleSupabaseSync(){
   supabaseSyncTimer = setTimeout(async () => {
     await syncAllToSupabase();
     showToast('Değişiklikler veritabanına kaydedildi ✓');
-    renderSupabaseSyncStatus(true);
   }, 900);
 }
-document.getElementById('adminDashboard').addEventListener('click', scheduleSupabaseSync);
-document.getElementById('adminDashboard').addEventListener('input', scheduleSupabaseSync);
-document.getElementById('adminDashboard').addEventListener('change', scheduleSupabaseSync);
 
-/* ---- İlk kurulum: mevcut örnek verileri Supabase'e bir kez aktar (sadece admin, giriş yapmış halde) ---- */
-document.getElementById('seedSupabaseBtn').addEventListener('click', () => {
-  showCustomConfirm('Mevcut ürün/kategori/marka/ünvan verileri Supabase\'e aktarılacak. Devam edilsin mi?', async () => {
-    document.getElementById('supabaseSyncStatus').textContent = 'Aktarılıyor…';
+/* ---- Admin oturumu: sayfa yenilenirken (kısa süreli) admin modunu koru, ama
+   sekme/tarayıcı 2 dakikadan uzun süre kapalı kalırsa yeniden hedef2026 istensin. ---- */
+const ADMIN_SESSION_KEY = 'hedefAksesuarAdminSession';
+const ADMIN_SESSION_DURATION_MS = 2 * 60 * 1000;
+function saveAdminSession(){
+  localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({expiresAt: Date.now() + ADMIN_SESSION_DURATION_MS}));
+}
+function clearAdminSession(){
+  localStorage.removeItem(ADMIN_SESSION_KEY);
+}
+async function restoreAdminSession(){
+  try {
+    const raw = localStorage.getItem(ADMIN_SESSION_KEY);
+    if(!raw) return;
+    const session = JSON.parse(raw);
+    if(!session.expiresAt || session.expiresAt < Date.now()){ clearAdminSession(); return; }
+    adminUnlocked = true;
+    saveAdminSession();
+    showAdmin();
     await adminSupabaseSignIn();
-    await syncAllToSupabase();
-    renderSupabaseSyncStatus(true);
-    showToast('Veriler Supabase\'e aktarıldı.');
-  });
-});
+  } catch(e){
+    clearAdminSession();
+  }
+}
+setInterval(() => { if(adminUnlocked) saveAdminSession(); }, 30000);

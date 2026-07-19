@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=10" onload="window.__revealBody()" onerror="window.__revealBody()">
+<link rel="stylesheet" href="css/style.css?v=11" onload="window.__revealBody()" onerror="window.__revealBody()">
 </head>
 <body>
 
@@ -194,7 +194,7 @@
       <div class="admin-panel" id="tab-urunler" style="display:none;">
         <div class="admin-panel-head">
           <h3>Ürünler <span class="muted-count" id="productCountLabel"></span></h3>
-          <button class="btn btn-primary" id="newProductBtn">+ Yeni Ürün</button>
+          <button class="btn btn-primary admin-btn-add" id="newProductBtn">+ Yeni Ürün</button>
         </div>
         <div class="admin-table-wrap">
           <table class="admin-table" id="productsTable">
@@ -215,11 +215,11 @@
           <div class="admin-card">
             <div class="admin-panel-head">
               <h3>Kategoriler</h3>
-              <button class="btn btn-ghost" id="toggleNewCategoryBtn">+ Yeni Kategori</button>
+              <button class="btn btn-ghost admin-btn-add" id="toggleNewCategoryBtn">+ Yeni Kategori</button>
             </div>
             <div class="admin-form-row" id="newCategoryRow" style="display:none;">
               <input class="admin-input admin-input-add" id="newCategoryInput" placeholder="Yeni kategori adı">
-              <button class="btn btn-ghost" id="addCategoryBtn">Ekle</button>
+              <button class="btn btn-ghost admin-btn-add" id="addCategoryBtn">Ekle</button>
             </div>
             <div id="categoryManager"></div>
           </div>
@@ -229,11 +229,11 @@
           <div class="admin-card">
             <div class="admin-panel-head">
               <h3>Markalar</h3>
-              <button class="btn btn-ghost" id="toggleNewBrandBtn">+ Yeni Marka</button>
+              <button class="btn btn-ghost admin-btn-add" id="toggleNewBrandBtn">+ Yeni Marka</button>
             </div>
             <div class="admin-form-row" id="newBrandRow" style="display:none;">
               <input class="admin-input admin-input-add" id="newBrandInput" placeholder="Yeni marka adı">
-              <button class="btn btn-ghost" id="addBrandBtn">Ekle</button>
+              <button class="btn btn-ghost admin-btn-add" id="addBrandBtn">Ekle</button>
             </div>
             <div id="brandManager"></div>
           </div>
@@ -278,7 +278,7 @@
                 <option value="USD">$ USD</option>
               </select>
               <input class="admin-input" id="newTierDiscount" type="number" placeholder="İndirim %" style="max-width:110px;">
-              <button class="btn btn-ghost" id="addTierBtn">+ Ünvan Ekle</button>
+              <button class="btn btn-ghost admin-btn-add" id="addTierBtn">+ Ünvan Ekle</button>
             </div>
           </div>
         </div>
@@ -444,13 +444,6 @@
   </div>
   <div class="drawer-items" style="padding:20px 24px;">
     <div class="admin-card">
-      <h3>Veritabanı Bağlantısı</h3>
-      <p class="muted-note">Değişiklikleriniz artık Supabase üzerinden tüm ziyaretçilerle paylaşılıyor.</p>
-      <div id="supabaseSyncStatus" class="muted-note" style="margin-bottom:10px;">Yükleniyor…</div>
-      <button class="btn btn-ghost" id="seedSupabaseBtn">İlk Kurulum: Verileri Supabase'e Aktar</button>
-    </div>
-
-    <div class="admin-card">
       <h3>Dolar Kuru</h3>
       <p class="muted-note">Bayi ve Servis gibi dolar bazlı ünvanlar için kullanılan kur budur. Sayfa açıldığında canlı kur çekilmeye çalışılır; başarısız olursa aşağıdaki değer kullanılır.</p>
       <div id="rateDisplay" style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; margin-bottom:14px;"></div>
@@ -466,7 +459,7 @@
       <div id="deviceTypeList" class="brand-models" style="padding-top:0; border-top:none;"></div>
       <div class="admin-form-row" style="margin-top:8px;">
         <input class="admin-input admin-input-add" id="newDeviceTypeInput" placeholder="Yeni cihaz tipi (ör. Kamera)">
-        <button class="btn btn-ghost" id="addDeviceTypeBtn">+ Ekle</button>
+        <button class="btn btn-ghost admin-btn-add" id="addDeviceTypeBtn">+ Ekle</button>
       </div>
     </div>
 
@@ -494,16 +487,16 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="js/data.js?v=10"></script>
-<script src="js/utils.js?v=10"></script>
-<script src="js/shop.js?v=10"></script>
-<script src="js/cart.js?v=10"></script>
-<script src="js/navigation.js?v=10"></script>
-<script src="js/auth-profile.js?v=10"></script>
-<script src="js/product-detail.js?v=10"></script>
-<script src="js/admin.js?v=10"></script>
-<script src="js/supabase-sync.js?v=10"></script>
-<script src="js/main.js?v=10"></script>
+<script src="js/data.js?v=11"></script>
+<script src="js/utils.js?v=11"></script>
+<script src="js/shop.js?v=11"></script>
+<script src="js/cart.js?v=11"></script>
+<script src="js/navigation.js?v=11"></script>
+<script src="js/auth-profile.js?v=11"></script>
+<script src="js/product-detail.js?v=11"></script>
+<script src="js/admin.js?v=11"></script>
+<script src="js/supabase-sync.js?v=11"></script>
+<script src="js/main.js?v=11"></script>
 
 </body>
 </html>

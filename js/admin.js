@@ -9,6 +9,7 @@ document.getElementById('adminLoginBtn').addEventListener('click', async () => {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
     renderAdminAll();
+    saveAdminSession();
     await adminSupabaseSignIn();
   } else {
     document.getElementById('adminLoginError').style.display = 'block';
@@ -528,6 +529,7 @@ function openProductEditor(productId){
     }
     renderGrid(); renderFeaturedRows(); renderSidebar();
     exitProductEditMode();
+    scheduleSupabaseSync();
   });
 }
 
@@ -553,7 +555,7 @@ function renderCategoryManager(){
         ${c.subs.map(s => `<span class="brand-model-chip">${s.label}<button type="button" class="chip-remove-btn" onclick="removeCategorySub('${c.key}','${s.key}')">✕</button></span>`).join('')}
         <div style="margin-top:8px; display:flex; gap:6px;">
           <input class="admin-input admin-input-add" placeholder="Yeni cihaz tipi (ör. Kulaklık)" id="newSubInput_${c.key}" style="font-size:12.5px; padding:7px 10px;">
-          <button class="btn btn-ghost" style="padding:7px 12px; font-size:12.5px;" onclick="addCategorySub('${c.key}')">+ Ekle</button>
+          <button class="btn btn-ghost admin-btn-add" style="padding:7px 12px; font-size:12.5px;" onclick="addCategorySub('${c.key}')">+ Ekle</button>
         </div>
       </div>
     </div>
@@ -567,6 +569,7 @@ document.getElementById('addCategoryBtn').addEventListener('click', () => {
   CATEGORIES.push({key, label, subs:[]});
   input.value = '';
   renderCategoryManager(); renderSidebar();
+  scheduleSupabaseSync();
 });
 function removeCategory(key){
   const cat = CATEGORIES.find(c => c.key === key);
@@ -591,6 +594,7 @@ function addCategorySub(catKey){
   cat.subs.push({key, label});
   input.value = '';
   renderCategoryManager(); renderSidebar();
+  scheduleSupabaseSync();
 }
 function removeCategorySub(catKey, subKey){
   const cat = CATEGORIES.find(c => c.key === catKey);
@@ -599,6 +603,7 @@ function removeCategorySub(catKey, subKey){
   const doDelete = () => {
     cat.subs = cat.subs.filter(s => s.key !== subKey);
     renderCategoryManager(); renderSidebar();
+    scheduleSupabaseSync();
   };
   if(hasDependents){
     showCustomConfirm(`"${sub.label}" cihaz tipinde ürün var. Yine de silmek istediğine emin misin?`, doDelete);
@@ -637,7 +642,7 @@ function renderBrandManager(){
           <select class="admin-input" id="newModelDevice_${m.key}" style="font-size:12.5px; padding:7px 10px; max-width:130px;">
             ${DEVICE_TYPES.map(d => `<option value="${d.key}">${d.label}</option>`).join('')}
           </select>
-          <button class="btn btn-ghost" style="padding:7px 12px; font-size:12.5px;" onclick="addModel('${m.key}')">+ Model</button>
+          <button class="btn btn-ghost admin-btn-add" style="padding:7px 12px; font-size:12.5px;" onclick="addModel('${m.key}')">+ Model</button>
         </div>
       </div>
     </div>`;
@@ -657,6 +662,7 @@ function addDeviceType(){
   input.value = '';
   renderBrandManager();
   renderDeviceTypeList();
+  scheduleSupabaseSync();
 }
 function renderDeviceTypeList(){
   const el = document.getElementById('deviceTypeList');
@@ -671,6 +677,7 @@ document.getElementById('addBrandBtn').addEventListener('click', () => {
   MARKALAR.push({key, label, models:[]});
   input.value = '';
   renderBrandManager();
+  scheduleSupabaseSync();
 });
 document.getElementById('addDeviceTypeBtn').addEventListener('click', addDeviceType);
 function removeBrand(key){
@@ -690,12 +697,14 @@ function addModel(brandKey){
   marka.models.push({key, label, device: deviceSel.value});
   MODEL_TO_MARKA[key] = brandKey;
   renderBrandManager();
+  scheduleSupabaseSync();
 }
 function removeModel(brandKey, modelKey){
   const marka = MARKALAR.find(m => m.key === brandKey);
   marka.models = marka.models.filter(md => md.key !== modelKey);
   delete MODEL_TO_MARKA[modelKey];
   renderBrandManager();
+  scheduleSupabaseSync();
 }
 
 /* ---- Stok ---- */
@@ -801,11 +810,13 @@ function setColorStock(productId, idx, val){
   const p = PRODUCTS.find(x => x.id === productId);
   p.variants.colors[idx].stock = Math.max(0, parseInt(val) || 0);
   renderStockTable();
+  scheduleSupabaseSync();
 }
 function setModelStock(productId, idx, val){
   const p = PRODUCTS.find(x => x.id === productId);
   p.variants.models[idx].stock = Math.max(0, parseInt(val) || 0);
   renderStockTable();
+  scheduleSupabaseSync();
 }
 function setModelVariantStock(productId, modelIdx, variantName, val){
   const p = PRODUCTS.find(x => x.id === productId);
@@ -813,6 +824,7 @@ function setModelVariantStock(productId, modelIdx, variantName, val){
   if(!m.variantStock) m.variantStock = {};
   m.variantStock[variantName] = Math.max(0, parseInt(val) || 0);
   renderStockTable();
+  scheduleSupabaseSync();
 }
 function variantStockBadge(stock){
   if(stock <= 0) return `<span class="stock-badge stock-out">Tükendi</span>`;
@@ -831,11 +843,13 @@ function adjustStock(id, delta){
   const p = PRODUCTS.find(x => x.id === id);
   p.stock = Math.max(0, p.stock + delta);
   renderStockTable(); renderStats(); renderLowStockList(); renderProductsTable(); renderGrid(); renderFeaturedRows();
+  scheduleSupabaseSync();
 }
 function restockProduct(id){
   const p = PRODUCTS.find(x => x.id === id);
   p.stock = 25;
   renderStockTable(); renderStats(); renderLowStockList(); renderProductsTable(); renderGrid(); renderFeaturedRows();
+  scheduleSupabaseSync();
 }
 
 /* ---- Barkodlar ---- */
@@ -933,12 +947,14 @@ function saveManualBarcodeFromField(productId, kind, idx){
   variant.barcode = val;
   renderBarcodeTab();
   showToast('Barkod eklendi — otomatik oluşturulanın yerine geçti.');
+  scheduleSupabaseSync();
 }
 function resetProductVariantBarcode(productId, kind, idx){
   const p = PRODUCTS.find(x => x.id === productId);
   const variant = kind === 'color' ? p.variants.colors[idx] : p.variants.patterns[idx];
   variant.barcode = null;
   renderBarcodeTab();
+  scheduleSupabaseSync();
 }
 function saveModelVariantBarcode(productId, modelIdx, variantName, fieldId){
   const input = document.getElementById(fieldId);
@@ -950,12 +966,14 @@ function saveModelVariantBarcode(productId, modelIdx, variantName, fieldId){
   m.variantBarcodes[variantName] = val;
   renderBarcodeTab();
   showToast('Barkod eklendi — otomatik oluşturulanın yerine geçti.');
+  scheduleSupabaseSync();
 }
 function resetModelVariantBarcode(productId, modelIdx, variantName){
   const p = PRODUCTS.find(x => x.id === productId);
   const m = p.variants.models[modelIdx];
   if(m.variantBarcodes) delete m.variantBarcodes[variantName];
   renderBarcodeTab();
+  scheduleSupabaseSync();
 }
 document.getElementById('barcodeSearchInput').addEventListener('input', (e) => {
   barcodeSearchTerm = e.target.value;
@@ -1003,6 +1021,7 @@ function saveTierEdit(id){
   editingTierId = null;
   renderTierManager();
   renderGrid(); renderFeaturedRows(); updateCart();
+  scheduleSupabaseSync();
 }
 document.getElementById('addTierBtn').addEventListener('click', () => {
   const name = document.getElementById('newTierName').value.trim();
@@ -1013,6 +1032,7 @@ document.getElementById('addTierBtn').addEventListener('click', () => {
   document.getElementById('newTierName').value = '';
   document.getElementById('newTierDiscount').value = '';
   renderTierManager(); renderUserTierManager();
+  scheduleSupabaseSync();
 });
 function removeTier(id){
   showCustomConfirm('Bu ünvanı silmek istediğine emin misin? Bu ünvana atanmış kullanıcılar varsayılan Üye fiyatına döner.', () => {
@@ -1021,6 +1041,7 @@ function removeTier(id){
     renderTierManager(); renderUserTierManager();
     renderGrid(); renderFeaturedRows(); updateCart();
     deleteRowFromSupabase('price_tiers', 'id', id);
+    scheduleSupabaseSync();
   });
 }
 
@@ -1074,6 +1095,7 @@ function setUserTier(username, tierId){
     renderGrid(); renderFeaturedRows(); updateCart();
   }
   showToast(`${u.displayName} artık "${PRICE_TIERS.find(t=>t.id===tierId).name}" ünvanında.`);
+  scheduleSupabaseSync();
 }
 
 /* ---- Siparişler ---- */
@@ -1110,6 +1132,7 @@ function setOrderStatus(orderId, status){
   o.status = status;
   renderOrders();
   showToast(`Sipariş #${orderId} durumu güncellendi: ${ORDER_STATUS_LABELS[status]} (demo bildirim)`);
+  scheduleSupabaseSync();
 }
 
 /* ---- Ayarlar ---- */
@@ -1126,6 +1149,7 @@ document.getElementById('saveManualRateBtn').addEventListener('click', () => {
   renderRateDisplay();
   renderGrid(); renderFeaturedRows(); updateCart(); renderProductsTable(); renderStats(); renderOrders();
   showToast('Dolar kuru güncellendi.');
+  scheduleSupabaseSync();
 });
 
 function renderSocialLinksForm(){
@@ -1139,6 +1163,7 @@ document.getElementById('saveSocialLinksBtn').addEventListener('click', () => {
   SOCIAL_LINKS.twitter = document.getElementById('socialTwitterInput').value.trim();
   renderFooterSocial();
   showToast('Sosyal medya bağlantıları güncellendi.');
+  scheduleSupabaseSync();
 });
 
 function renderNewsletterAdminList(){
