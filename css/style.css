@@ -590,6 +590,23 @@
 
   /* ---------- AUTH / PROFILE ---------- */
   .auth-tabs{display:flex; gap:8px;}
+  .auth-split-card{
+    display:flex; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden; min-height:520px;
+  }
+  .auth-split-form{flex:1; min-width:0; padding:44px 40px;}
+  .auth-google-btn svg{flex-shrink:0;}
+  .auth-split-visual{
+    flex:1; min-width:0; background:var(--bg-soft); border-left:1px solid var(--line);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px;
+  }
+  .auth-phone-stage{transform:scale(0.55); margin:-95px 0;}
+  .auth-split-visual h3{font-size:22px; margin-bottom:10px;}
+  .auth-split-visual p{font-size:14px; color:var(--muted); max-width:280px; line-height:1.6;}
+  @media (max-width:800px){
+    .auth-split-visual{display:none;}
+    .auth-split-form{padding:32px 24px;}
+  }
   #profileView label{font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; display:block; margin-bottom:6px;}
 
   .profile-header{display:flex; align-items:center; gap:20px; margin-bottom:32px; padding-bottom:26px; border-bottom:1px solid var(--line);}
@@ -754,6 +771,19 @@
   .why-card:nth-child(3) .why-icon{background:#FFF6DE; color:#B4880A;}
   .why-card h3{font-size:17px; margin-bottom:8px;}
   .why-card p{font-size:14px; color:var(--muted); line-height:1.6;}
+
+  /* ---------- FAQ / SSS ---------- */
+  .faq-list{display:flex; flex-direction:column; gap:12px;}
+  .faq-item{background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+  .faq-question{
+    width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px 22px; text-align:left; font-weight:700; font-size:15px; transition:background .15s ease;
+  }
+  .faq-question:hover{background:var(--bg-soft);}
+  .faq-chevron{color:var(--muted); flex-shrink:0; transition:transform .2s ease;}
+  .faq-item.open .faq-chevron{transform:rotate(180deg);}
+  .faq-answer{max-height:0; overflow:hidden; transition:max-height .28s ease;}
+  .faq-answer p{padding:0 22px 18px; color:var(--muted); font-size:14px; line-height:1.65;}
 
   /* ---------- FOOTER ---------- */
   footer{padding:56px 0 30px; margin-top:auto;}

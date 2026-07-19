@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=13" onload="window.__revealBody()" onerror="window.__revealBody()">
+<link rel="stylesheet" href="css/style.css?v=14" onload="window.__revealBody()" onerror="window.__revealBody()">
 </head>
 <body>
 
@@ -120,6 +120,61 @@
         <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
         <h3>Kolay İade</h3>
         <p>Beğenmezsen 14 gün içinde ücretsiz iade, sorun değil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section sss" id="sss">
+  <div class="wrap" style="max-width:820px;">
+    <div class="section-head">
+      <div>
+        <h2>Sıkça Sorulan Sorular</h2>
+        <p>Aklına takılan bir şey mi var? Muhtemelen cevabı burada.</p>
+      </div>
+    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item open">
+        <button type="button" class="faq-question">
+          <span>Kargo ne kadar sürede gelir?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Siparişin aynı gün kargoya verilir, genellikle 1-3 iş günü içinde elinde olur. Kargo takip numaranı sipariş durumundan görebilirsin.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-question">
+          <span>İade ve değişim nasıl yapılır?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Ürünü teslim aldıktan sonra 14 gün içinde, kullanılmamış ve orijinal ambalajında olması şartıyla ücretsiz iade edebilirsin. Değişim için merhaba@hedefaksesuar.com adresinden bize ulaşman yeterli.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-question">
+          <span>Ürünlerin garantisi var mı?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Evet, tüm ürünlerimiz üretim hatalarına karşı garantilidir. Sorun yaşarsan sipariş numaranla bize ulaş, en kısa sürede çözüm sunalım.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-question">
+          <span>Hangi ödeme yöntemlerini kabul ediyorsunuz?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Kredi/banka kartı ve kapıda ödeme seçenekleriyle güvenle alışveriş yapabilirsin.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-question">
+          <span>Telefon modelim listede yok, ne yapmalıyım?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Yeni model ekleme taleplerini merhaba@hedefaksesuar.com adresinden bize iletebilirsin, kataloğumuzu düzenli güncelliyoruz.</p></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-question">
+          <span>Bayi/Servis fiyatlarından nasıl yararlanabilirim?</span>
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-answer"><p>Hesabına giriş yaptıktan sonra yönetici onayıyla Bayi veya Servis ünvanı tanımlanabilir; bu ünvanlarda özel fiyatlandırma geçerli olur.</p></div>
       </div>
     </div>
   </div>
@@ -309,34 +364,53 @@
 
 <div id="profileView" style="display:none;">
   <div class="wrap" style="max-width:980px; padding-top:56px; padding-bottom:90px;">
-    <div id="authForms" style="max-width:420px; margin:0 auto;">
-      <div class="auth-tabs" id="authTabs">
-        <button class="admin-tab-btn active" data-authtab="login">Giriş Yap</button>
-        <button class="admin-tab-btn" data-authtab="register">Kayıt Ol</button>
-      </div>
+    <div id="authForms" style="max-width:860px; margin:0 auto;">
+      <div class="auth-split-card">
+        <div class="auth-split-form">
+          <div class="auth-tabs" id="authTabs">
+            <button class="admin-tab-btn active" data-authtab="login">Giriş Yap</button>
+            <button class="admin-tab-btn" data-authtab="register">Kayıt Ol</button>
+          </div>
 
-      <div id="loginForm" style="margin-top:22px;">
-        <label>Kullanıcı adı, e-posta veya telefon</label>
-        <input class="admin-input" id="loginIdentifier" style="margin-bottom:12px;" placeholder="ör. Hasan">
-        <label>Şifre</label>
-        <input class="admin-input" id="loginPassword" type="password" style="margin-bottom:16px;" placeholder="Şifre">
-        <button class="btn btn-primary" id="loginSubmitBtn" style="width:100%; justify-content:center;">Giriş Yap</button>
-        <button class="btn btn-ghost" id="googleLoginBtn" style="width:100%; justify-content:center; margin-top:10px;">Google ile Devam Et</button>
-        <p id="loginError" style="display:none; color:var(--red); font-size:13px; margin-top:10px;">Kullanıcı adı/e-posta/telefon veya şifre hatalı.</p>
-      </div>
+          <div id="loginForm" style="margin-top:22px;">
+            <label>Kullanıcı adı, e-posta veya telefon</label>
+            <input class="admin-input" id="loginIdentifier" style="margin-bottom:12px;" placeholder="ör. Hasan">
+            <label>Şifre</label>
+            <input class="admin-input" id="loginPassword" type="password" style="margin-bottom:16px;" placeholder="Şifre">
+            <button class="btn btn-primary" id="loginSubmitBtn" style="width:100%; justify-content:center;">Giriş Yap</button>
+            <button class="btn btn-ghost auth-google-btn" id="googleLoginBtn" style="width:100%; justify-content:center; margin-top:10px;">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47a5.53 5.53 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.88-3c-1.08.72-2.45 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.27v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28v-3.1H1.27A12 12 0 0 0 0 12c0 1.94.46 3.77 1.27 5.38z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.27 6.62l4 3.1C6.22 6.86 8.87 4.75 12 4.75z"/></svg>
+              Google ile Devam Et
+            </button>
+            <p id="loginError" style="display:none; color:var(--red); font-size:13px; margin-top:10px;">Kullanıcı adı/e-posta/telefon veya şifre hatalı.</p>
+          </div>
 
-      <div id="registerForm" style="display:none; margin-top:22px;">
-        <label>Ad / Kullanıcı Adı</label>
-        <input class="admin-input" id="regName" style="margin-bottom:12px;" placeholder="Adın">
-        <label>E-posta (opsiyonel)</label>
-        <input class="admin-input" id="regEmail" style="margin-bottom:12px;" placeholder="ornek@eposta.com">
-        <label>Telefon (opsiyonel)</label>
-        <input class="admin-input" id="regPhone" style="margin-bottom:12px;" placeholder="05xx xxx xx xx">
-        <label>Şifre</label>
-        <input class="admin-input" id="regPassword" type="password" style="margin-bottom:16px;" placeholder="Şifre">
-        <button class="btn btn-primary" id="registerSubmitBtn" style="width:100%; justify-content:center;">Kayıt Ol</button>
-        <button class="btn btn-ghost" id="googleRegisterBtn" style="width:100%; justify-content:center; margin-top:10px;">Google ile Devam Et</button>
-        <p id="registerError" style="display:none; color:var(--red); font-size:13px; margin-top:10px;"></p>
+          <div id="registerForm" style="display:none; margin-top:22px;">
+            <label>Ad / Kullanıcı Adı</label>
+            <input class="admin-input" id="regName" style="margin-bottom:12px;" placeholder="Adın">
+            <label>E-posta (opsiyonel)</label>
+            <input class="admin-input" id="regEmail" style="margin-bottom:12px;" placeholder="ornek@eposta.com">
+            <label>Telefon (opsiyonel)</label>
+            <input class="admin-input" id="regPhone" style="margin-bottom:12px;" placeholder="05xx xxx xx xx">
+            <label>Şifre</label>
+            <input class="admin-input" id="regPassword" type="password" style="margin-bottom:16px;" placeholder="Şifre">
+            <button class="btn btn-primary" id="registerSubmitBtn" style="width:100%; justify-content:center;">Kayıt Ol</button>
+            <button class="btn btn-ghost auth-google-btn" id="googleRegisterBtn" style="width:100%; justify-content:center; margin-top:10px;">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47a5.53 5.53 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.88-3c-1.08.72-2.45 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.96H1.27v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28v-3.1H1.27A12 12 0 0 0 0 12c0 1.94.46 3.77 1.27 5.38z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.27 6.62l4 3.1C6.22 6.86 8.87 4.75 12 4.75z"/></svg>
+              Google ile Devam Et
+            </button>
+            <p id="registerError" style="display:none; color:var(--red); font-size:13px; margin-top:10px;"></p>
+          </div>
+        </div>
+        <div class="auth-split-visual">
+          <div class="phone-stage auth-phone-stage">
+            <div class="phone phone-1 p1"><div class="notch"></div><div class="screen"><div class="cam"></div></div></div>
+            <div class="phone phone-2 p2"><div class="notch"></div><div class="screen"><div class="cam"></div></div></div>
+            <div class="phone phone-3 p3"><div class="notch"></div><div class="screen"><div class="cam"></div></div></div>
+          </div>
+          <h3>Aramıza Katıl</h3>
+          <p>Siparişlerini takip et, favori ürünlerine hızlıca ulaş, sana özel fiyatlardan yararlan.</p>
+        </div>
       </div>
     </div>
 
@@ -371,6 +445,7 @@
           <h4>Mağaza</h4>
           <a href="#urunler" data-goto="products">Ürünler</a>
           <a href="#neden-biz" data-goto-section="neden-biz">Neden Biz</a>
+          <a href="#sss" data-goto-section="sss">Sıkça Sorulan Sorular</a>
         </div>
         <div class="foot-col">
           <h4>İletişim</h4>
@@ -487,16 +562,16 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="js/data.js?v=13"></script>
-<script src="js/utils.js?v=13"></script>
-<script src="js/shop.js?v=13"></script>
-<script src="js/cart.js?v=13"></script>
-<script src="js/navigation.js?v=13"></script>
-<script src="js/auth-profile.js?v=13"></script>
-<script src="js/product-detail.js?v=13"></script>
-<script src="js/admin.js?v=13"></script>
-<script src="js/supabase-sync.js?v=13"></script>
-<script src="js/main.js?v=13"></script>
+<script src="js/data.js?v=14"></script>
+<script src="js/utils.js?v=14"></script>
+<script src="js/shop.js?v=14"></script>
+<script src="js/cart.js?v=14"></script>
+<script src="js/navigation.js?v=14"></script>
+<script src="js/auth-profile.js?v=14"></script>
+<script src="js/product-detail.js?v=14"></script>
+<script src="js/admin.js?v=14"></script>
+<script src="js/supabase-sync.js?v=14"></script>
+<script src="js/main.js?v=14"></script>
 
 </body>
 </html>
