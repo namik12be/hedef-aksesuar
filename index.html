@@ -2,13 +2,13 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<script>(function(){try{var t=localStorage.getItem('hedefAksesuarTheme')||'system';var dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+<script>(function(){document.documentElement.classList.add('preload');try{var t=localStorage.getItem('hedefAksesuarTheme')||'system';var dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');}catch(e){}window.addEventListener('load',function(){setTimeout(function(){document.documentElement.classList.remove('preload');},60);});})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hedef Aksesuar — Telefon Kılıfı ve Aksesuar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 
@@ -217,7 +217,7 @@
               <button class="btn btn-ghost" id="toggleNewCategoryBtn">+ Yeni Kategori</button>
             </div>
             <div class="admin-form-row" id="newCategoryRow" style="display:none;">
-              <input class="admin-input" id="newCategoryInput" placeholder="Yeni kategori adı">
+              <input class="admin-input admin-input-add" id="newCategoryInput" placeholder="Yeni kategori adı">
               <button class="btn btn-ghost" id="addCategoryBtn">Ekle</button>
             </div>
             <div id="categoryManager"></div>
@@ -231,7 +231,7 @@
               <button class="btn btn-ghost" id="toggleNewBrandBtn">+ Yeni Marka</button>
             </div>
             <div class="admin-form-row" id="newBrandRow" style="display:none;">
-              <input class="admin-input" id="newBrandInput" placeholder="Yeni marka adı">
+              <input class="admin-input admin-input-add" id="newBrandInput" placeholder="Yeni marka adı">
               <button class="btn btn-ghost" id="addBrandBtn">Ekle</button>
             </div>
             <div id="brandManager"></div>
@@ -464,7 +464,7 @@
       <p class="muted-note">Yeni model eklerken markalara seçilebilen cihaz tipleri.</p>
       <div id="deviceTypeList" class="brand-models" style="padding-top:0; border-top:none;"></div>
       <div class="admin-form-row" style="margin-top:8px;">
-        <input class="admin-input" id="newDeviceTypeInput" placeholder="Yeni cihaz tipi (ör. Kamera)">
+        <input class="admin-input admin-input-add" id="newDeviceTypeInput" placeholder="Yeni cihaz tipi (ör. Kamera)">
         <button class="btn btn-ghost" id="addDeviceTypeBtn">+ Ekle</button>
       </div>
     </div>
@@ -493,16 +493,16 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="js/data.js?v=8"></script>
-<script src="js/utils.js?v=8"></script>
-<script src="js/shop.js?v=8"></script>
-<script src="js/cart.js?v=8"></script>
-<script src="js/navigation.js?v=8"></script>
-<script src="js/auth-profile.js?v=8"></script>
-<script src="js/product-detail.js?v=8"></script>
-<script src="js/admin.js?v=8"></script>
-<script src="js/supabase-sync.js?v=8"></script>
-<script src="js/main.js?v=8"></script>
+<script src="js/data.js?v=9"></script>
+<script src="js/utils.js?v=9"></script>
+<script src="js/shop.js?v=9"></script>
+<script src="js/cart.js?v=9"></script>
+<script src="js/navigation.js?v=9"></script>
+<script src="js/auth-profile.js?v=9"></script>
+<script src="js/product-detail.js?v=9"></script>
+<script src="js/admin.js?v=9"></script>
+<script src="js/supabase-sync.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
 
 </body>
 </html>

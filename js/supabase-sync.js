@@ -8,7 +8,11 @@ const SUPABASE_ANON_KEY = 'sb_publishable_SoVZxwUJGwk0TGtIvB2eVg_N2l5OMzT';
 const ADMIN_AUTH_EMAIL = 'hedef-aksesuar@gmail.com';
 const ADMIN_AUTH_PASSWORD = 'i3=}!%Ef8qy:"p>';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// persistSession:false — tarayıcı kapatılıp açıldığında (ya da sayfa tazelendiğinde) admin oturumu
+// kalmasın, yeniden hedef2026 girilmeden veritabanına yazma izni verilmesin.
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: false },
+});
 window.usdRateManual = false;
 
 async function adminSupabaseSignIn(){
@@ -56,19 +60,24 @@ function rowToOrder(r){ return {id:r.id, customer:r.customer, username:r.usernam
 function newsletterToRow(n){ return {email:n.email, subscribed_date:n.date}; }
 function rowToNewsletter(r){ return {email:r.email, date:r.subscribed_date}; }
 
-/* ---- Genel amaçlı tablo eşitleme: yereldeki satırları yaz, yerelde artık olmayanı sil ---- */
-async function reconcileTable(table, rows, keyCol){
-  if(rows.length){
-    const { error } = await supabaseClient.from(table).upsert(rows, {onConflict: keyCol});
-    if(error){ console.error(`Supabase yazma hatası (${table}):`, error.message); return; }
-  }
-  const { data: remoteRows, error: fetchErr } = await supabaseClient.from(table).select(keyCol);
-  if(fetchErr){ console.error(`Supabase okuma hatası (${table}):`, fetchErr.message); return; }
-  const localKeys = new Set(rows.map(r => String(r[keyCol])));
-  const toDelete = (remoteRows || []).map(r => r[keyCol]).filter(k => !localKeys.has(String(k)));
-  if(toDelete.length){
-    const { error: delErr } = await supabaseClient.from(table).delete().in(keyCol, toDelete);
-    if(delErr) console.error(`Supabase silme hatası (${table}):`, delErr.message);
+/* ---- Tablo yazma: SADECE ekleme/güncelleme (upsert) yapar, hiçbir zaman satır silmez.
+   Otomatik arka plan senkronizasyonu bu yüzden güvenlidir — yerel dizi geçici bir hata
+   yüzünden boş görünse bile Supabase'deki veriyi asla toplu silmez. Silme işlemleri
+   sadece admin bir şeyi gerçekten sildiğinde, ayrı ve hedefli bir çağrıyla yapılır
+   (bkz. deleteRowFromSupabase). ---- */
+async function upsertTable(table, rows, keyCol){
+  if(!rows.length) return;
+  const { error } = await supabaseClient.from(table).upsert(rows, {onConflict: keyCol});
+  if(error) console.error(`Supabase yazma hatası (${table}):`, error.message);
+}
+
+async function deleteRowFromSupabase(table, keyCol, keyValue){
+  if(keyValue === undefined || keyValue === null || keyValue === '') return;
+  try {
+    const { error } = await supabaseClient.from(table).delete().eq(keyCol, keyValue);
+    if(error) console.error(`Supabase silme hatası (${table}):`, error.message);
+  } catch(e){
+    console.error(`Supabase silme hatası (${table}):`, e);
   }
 }
 
@@ -77,15 +86,15 @@ async function syncAllToSupabase(){
     const settingsRows = [{key:'social_links', value: SOCIAL_LINKS}];
     if(window.usdRateManual){ settingsRows.push({key:'usd_rate', value:{rate:usdRate, source:usdRateSource}}); }
     await Promise.all([
-      reconcileTable('products', PRODUCTS.map(productToRow), 'id'),
-      reconcileTable('categories', CATEGORIES.map(categoryToRow), 'key'),
-      reconcileTable('brands', MARKALAR.map(brandToRow), 'key'),
-      reconcileTable('device_types', DEVICE_TYPES.map(deviceTypeToRow), 'key'),
-      reconcileTable('price_tiers', PRICE_TIERS.map(tierToRow), 'id'),
-      reconcileTable('orders', ORDERS.map(orderToRow), 'id'),
-      reconcileTable('newsletter_subscribers', NEWSLETTER_SUBSCRIBERS.map(newsletterToRow), 'email'),
-      reconcileTable('user_tiers', USERS.map(u => ({username:u.username, tier_id:u.tierId})), 'username'),
-      reconcileTable('site_settings', settingsRows, 'key'),
+      upsertTable('products', PRODUCTS.map(productToRow), 'id'),
+      upsertTable('categories', CATEGORIES.map(categoryToRow), 'key'),
+      upsertTable('brands', MARKALAR.map(brandToRow), 'key'),
+      upsertTable('device_types', DEVICE_TYPES.map(deviceTypeToRow), 'key'),
+      upsertTable('price_tiers', PRICE_TIERS.map(tierToRow), 'id'),
+      upsertTable('orders', ORDERS.map(orderToRow), 'id'),
+      upsertTable('newsletter_subscribers', NEWSLETTER_SUBSCRIBERS.map(newsletterToRow), 'email'),
+      upsertTable('user_tiers', USERS.map(u => ({username:u.username, tier_id:u.tierId})), 'username'),
+      upsertTable('site_settings', settingsRows, 'key'),
     ]);
   } catch(e){
     console.error('Supabase senkronizasyon hatası:', e);
@@ -185,7 +194,11 @@ let supabaseSyncTimer = null;
 function scheduleSupabaseSync(){
   if(!adminUnlocked) return;
   clearTimeout(supabaseSyncTimer);
-  supabaseSyncTimer = setTimeout(() => { syncAllToSupabase(); }, 900);
+  supabaseSyncTimer = setTimeout(async () => {
+    await syncAllToSupabase();
+    showToast('Değişiklikler veritabanına kaydedildi ✓');
+    renderSupabaseSyncStatus(true);
+  }, 900);
 }
 document.getElementById('adminDashboard').addEventListener('click', scheduleSupabaseSync);
 document.getElementById('adminDashboard').addEventListener('input', scheduleSupabaseSync);

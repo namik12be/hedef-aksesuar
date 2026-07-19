@@ -1,3 +1,4 @@
+  html.preload, html.preload *{transition:none !important; animation:none !important;}
   :root{
     --bg:#FFFFFF;
     --bg-soft:#F7F6F2;
@@ -328,6 +329,8 @@
     font-family:inherit; font-size:14px; color:var(--ink); background:var(--surface);
   }
   .admin-input:focus{outline:none; border-color:var(--ink);}
+  .admin-input-add{border-width:2px; transition:border-color .15s ease;}
+  .admin-input-add:hover{border-color:var(--red);}
 
   .admin-mini-bar{padding:16px 28px 0;}
   .admin-mini-label{

@@ -4,6 +4,7 @@ document.getElementById('adminLoginBtn').addEventListener('click', async () => {
   const val = document.getElementById('adminPasswordInput').value;
   if(val === ADMIN_PASSWORD){
     adminUnlocked = true;
+    document.body.classList.add('admin-mode');
     document.getElementById('adminLoginError').style.display = 'none';
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
@@ -536,6 +537,7 @@ function deleteProduct(id){
     if(idx > -1) PRODUCTS.splice(idx, 1);
     renderProductsTable(); renderStockTable(); renderStats(); renderLowStockList();
     renderGrid(); renderFeaturedRows(); renderSidebar();
+    deleteRowFromSupabase('products', 'id', id);
   });
 }
 
@@ -550,7 +552,7 @@ function renderCategoryManager(){
       <div class="brand-models">
         ${c.subs.map(s => `<span class="brand-model-chip">${s.label}<button type="button" class="chip-remove-btn" onclick="removeCategorySub('${c.key}','${s.key}')">✕</button></span>`).join('')}
         <div style="margin-top:8px; display:flex; gap:6px;">
-          <input class="admin-input" placeholder="Yeni cihaz tipi (ör. Kulaklık)" id="newSubInput_${c.key}" style="font-size:12.5px; padding:7px 10px;">
+          <input class="admin-input admin-input-add" placeholder="Yeni cihaz tipi (ör. Kulaklık)" id="newSubInput_${c.key}" style="font-size:12.5px; padding:7px 10px;">
           <button class="btn btn-ghost" style="padding:7px 12px; font-size:12.5px;" onclick="addCategorySub('${c.key}')">+ Ekle</button>
         </div>
       </div>
@@ -572,6 +574,7 @@ function removeCategory(key){
   const doDelete = () => {
     CATEGORIES = CATEGORIES.filter(c => c.key !== key);
     renderCategoryManager(); renderSidebar();
+    deleteRowFromSupabase('categories', 'key', key);
   };
   if(hasDependents){
     showCustomConfirm(`"${cat.label}" kategorisinin içinde ${cat.subs.length} cihaz tipi ve/veya ürün var. Yine de silmek istediğine emin misin?`, doDelete);
@@ -630,7 +633,7 @@ function renderBrandManager(){
         </div>` : ''}
         ${shownModels.length === 0 ? `<p class="muted-note" style="margin:0 0 8px;">Bu filtrede model yok.</p>` : shownModels.map(md => `<span class="brand-model-chip">${md.label}<button type="button" class="chip-remove-btn" onclick="removeModel('${m.key}','${md.key}')">✕</button></span>`).join('')}
         <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-          <input class="admin-input" placeholder="Yeni model" id="newModelInput_${m.key}" style="font-size:12.5px; padding:7px 10px; flex:1; min-width:100px;">
+          <input class="admin-input admin-input-add" placeholder="Yeni model" id="newModelInput_${m.key}" style="font-size:12.5px; padding:7px 10px; flex:1; min-width:100px;">
           <select class="admin-input" id="newModelDevice_${m.key}" style="font-size:12.5px; padding:7px 10px; max-width:130px;">
             ${DEVICE_TYPES.map(d => `<option value="${d.key}">${d.label}</option>`).join('')}
           </select>
@@ -674,6 +677,7 @@ function removeBrand(key){
   showCustomConfirm('Bu markayı silmek istediğine emin misin?', () => {
     MARKALAR = MARKALAR.filter(m => m.key !== key);
     renderBrandManager();
+    deleteRowFromSupabase('brands', 'key', key);
   });
 }
 function addModel(brandKey){
@@ -1016,6 +1020,7 @@ function removeTier(id){
     USERS.forEach(u => { if(u.tierId === id) u.tierId = 'uye'; });
     renderTierManager(); renderUserTierManager();
     renderGrid(); renderFeaturedRows(); updateCart();
+    deleteRowFromSupabase('price_tiers', 'id', id);
   });
 }
 
@@ -1152,6 +1157,8 @@ function renderNewsletterAdminList(){
   `).join('');
 }
 function removeNewsletterSubscriber(i){
+  const email = NEWSLETTER_SUBSCRIBERS[i] && NEWSLETTER_SUBSCRIBERS[i].email;
   NEWSLETTER_SUBSCRIBERS.splice(i, 1);
   renderNewsletterAdminList();
+  deleteRowFromSupabase('newsletter_subscribers', 'email', email);
 }

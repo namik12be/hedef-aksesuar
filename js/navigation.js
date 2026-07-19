@@ -54,7 +54,7 @@ function showProducts(){
   window.scrollTo(0, 0);
 }
 function showAdmin(){
-  document.body.classList.add('admin-mode');
+  document.body.classList.remove('admin-mode');
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('productsView').style.display = 'none';
   document.getElementById('profileView').style.display = 'none';
@@ -62,6 +62,7 @@ function showAdmin(){
   document.getElementById('adminView').style.display = 'block';
   window.scrollTo(0, 0);
   if(adminUnlocked){
+    document.body.classList.add('admin-mode');
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
     renderAdminAll();
