@@ -2,13 +2,14 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<script>(function(){document.documentElement.classList.add('preload');try{var t=localStorage.getItem('hedefAksesuarTheme')||'system';var dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');}catch(e){}window.addEventListener('load',function(){setTimeout(function(){document.documentElement.classList.remove('preload');},60);});})();</script>
+<style>body{opacity:0}</style>
+<script>(function(){document.documentElement.classList.add('preload');try{var t=localStorage.getItem('hedefAksesuarTheme')||'system';var dark=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');}catch(e){}function reveal(){document.body.style.opacity='1';}window.__revealBody=reveal;setTimeout(reveal,1500);window.addEventListener('load',function(){setTimeout(function(){document.documentElement.classList.remove('preload');},60);});})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hedef Aksesuar — Telefon Kılıfı ve Aksesuar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=10" onload="window.__revealBody()" onerror="window.__revealBody()">
 </head>
 <body>
 
@@ -493,16 +494,16 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="js/data.js?v=9"></script>
-<script src="js/utils.js?v=9"></script>
-<script src="js/shop.js?v=9"></script>
-<script src="js/cart.js?v=9"></script>
-<script src="js/navigation.js?v=9"></script>
-<script src="js/auth-profile.js?v=9"></script>
-<script src="js/product-detail.js?v=9"></script>
-<script src="js/admin.js?v=9"></script>
-<script src="js/supabase-sync.js?v=9"></script>
-<script src="js/main.js?v=9"></script>
+<script src="js/data.js?v=10"></script>
+<script src="js/utils.js?v=10"></script>
+<script src="js/shop.js?v=10"></script>
+<script src="js/cart.js?v=10"></script>
+<script src="js/navigation.js?v=10"></script>
+<script src="js/auth-profile.js?v=10"></script>
+<script src="js/product-detail.js?v=10"></script>
+<script src="js/admin.js?v=10"></script>
+<script src="js/supabase-sync.js?v=10"></script>
+<script src="js/main.js?v=10"></script>
 
 </body>
 </html>
