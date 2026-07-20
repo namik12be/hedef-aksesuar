@@ -14,6 +14,7 @@ function colorHex(name){
 }
 
 let pdProductId = null, pdSelectedColor = null, pdSelectedPattern = null, pdSelectedModelVariant = null, pdQty = 1, pdReturnView = 'home';
+let pdMediaOverride = null;
 
 function pdMediaHTML(p){
   const screen = pdSelectedColor ? colorHex(pdSelectedColor) : p.screen;
@@ -35,6 +36,7 @@ function showProductDetail(id){
   pdSelectedPattern = (p.variants.patterns && p.variants.patterns[0]) ? p.variants.patterns[0].name : null;
   pdSelectedModelVariant = p.variants.models[0] || null;
   pdQty = 1;
+  pdMediaOverride = null;
   document.getElementById('homeView').style.display = 'none';
   document.getElementById('productsView').style.display = 'none';
   document.getElementById('adminView').style.display = 'none';
@@ -50,12 +52,29 @@ document.getElementById('pdBackBtn').addEventListener('click', () => {
 });
 
 function pdCurrentMediaHTML(p){
+  if(pdMediaOverride){
+    if(pdMediaOverride.type === 'video') return `<video src="${pdMediaOverride.src}" controls autoplay muted playsinline></video>`;
+    return `<img src="${pdMediaOverride.src}" alt="${p.name}">`;
+  }
   const patternObj = (p.variants.patterns || []).find(pt => pt.name === pdSelectedPattern);
   if(patternObj && patternObj.image) return `<img src="${patternObj.image}" alt="${p.name}">`;
   const colorObj = p.variants.colors.find(c => c.name === pdSelectedColor);
   if(colorObj && colorObj.image) return `<img src="${colorObj.image}" alt="${p.name}">`;
   if(p.image) return `<img src="${p.image}" alt="${p.name}">`;
   return pdMediaHTML(p);
+}
+function pdGalleryHTML(p){
+  const media = p.variants.media;
+  if(!media || ((!media.images || !media.images.length) && !media.video)) return '';
+  const imageThumbs = (media.images || []).map((src, i) => `<button type="button" class="pd-gallery-thumb" onclick="selectPdMedia('image', ${i})"><img src="${src}" alt=""></button>`).join('');
+  const videoThumb = media.video ? `<button type="button" class="pd-gallery-thumb pd-gallery-thumb-video" onclick="selectPdMedia('video', 0)">▶</button>` : '';
+  return `<div class="pd-gallery">${imageThumbs}${videoThumb}</div>`;
+}
+function selectPdMedia(type, idx){
+  const p = PRODUCTS.find(x => x.id === pdProductId);
+  if(!p || !p.variants.media) return;
+  pdMediaOverride = type === 'video' ? {type:'video', src: p.variants.media.video} : {type:'image', src: p.variants.media.images[idx]};
+  renderProductDetail();
 }
 
 function renderProductDetail(){
@@ -64,8 +83,11 @@ function renderProductDetail(){
   const outOfStock = p.stock <= 0;
   const patterns = p.variants.patterns || [];
   document.getElementById('productDetailBody').innerHTML = `
-    <div class="pd-media">
-      ${pdCurrentMediaHTML(p)}
+    <div class="pd-media-col">
+      <div class="pd-media">
+        ${pdCurrentMediaHTML(p)}
+      </div>
+      ${pdGalleryHTML(p)}
     </div>
     <div class="pd-info">
       <div class="pd-cat" style="background:${categoryAccentBg(p.brand)}; color:${categoryAccentFg(p.brand)}; padding:5px 12px; border-radius:100px; display:inline-block;">${brandLabel(p.brand)} · ${deviceLabel(p.device)}</div>

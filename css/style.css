@@ -575,6 +575,19 @@
     .barcode-row{grid-template-columns:1fr auto; row-gap:6px;}
     .barcode-row-code{display:none;}
   }
+  .media-upload-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .media-upload-btn{
+    display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:100px;
+    border:1.5px solid var(--ink); font-weight:600; font-size:13.5px; cursor:pointer; transition:all .15s ease;
+  }
+  .media-upload-btn:hover{border-color:var(--red); color:var(--red); background:var(--bg-soft);}
+  .media-preview-grid{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .media-thumb{position:relative; width:88px; height:88px; border-radius:10px; overflow:hidden; border:1px solid var(--line); background:var(--bg-soft); flex-shrink:0;}
+  .media-thumb img, .media-thumb video{width:100%; height:100%; object-fit:cover; display:block;}
+  .media-thumb button{
+    position:absolute; top:4px; right:4px; width:20px; height:20px; border-radius:50%;
+    background:rgba(0,0,0,.6); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px;
+  }
   .tag-input-field{
     width:100%; border:none; outline:none; font-family:inherit; font-size:14.5px; padding:4px 2px; background:transparent;
     color:var(--ink);
@@ -707,7 +720,16 @@
     background:var(--bg-soft); display:flex; align-items:center; justify-content:center; padding:60px;
     border-radius:24px; min-height:420px; overflow:hidden;
   }
-  .pd-media img{width:100%; height:100%; object-fit:cover; border-radius:18px;}
+  .pd-media img, .pd-media video{width:100%; height:100%; object-fit:cover; border-radius:18px;}
+  .pd-media-col{display:flex; flex-direction:column; gap:14px;}
+  .pd-gallery{display:flex; flex-wrap:wrap; gap:8px;}
+  .pd-gallery-thumb{
+    width:56px; height:56px; border-radius:8px; overflow:hidden; border:1.5px solid var(--line);
+    flex-shrink:0; padding:0; transition:border-color .15s ease;
+  }
+  .pd-gallery-thumb:hover{border-color:var(--ink);}
+  .pd-gallery-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pd-gallery-thumb-video{display:flex; align-items:center; justify-content:center; background:var(--bg-soft); font-size:16px;}
   .pd-media .mini-phone, .pd-media .mini-watch, .pd-media .mini-airpods, .pd-media .mini-tablet{transform:scale(2.1);}
   .pd-info{padding-top:6px;}
   .pd-cat{font-size:12.5px; color:var(--blue-dark); font-weight:700; text-transform:uppercase; letter-spacing:.03em;}

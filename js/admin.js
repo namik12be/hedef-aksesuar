@@ -178,7 +178,8 @@ document.getElementById('newProductBtn').addEventListener('click', () => openPro
 let pfColors = [];
 let pfPatterns = [];
 let pfModelVariants = [];
-let pfUploadedImage = null;
+let pfImages = [];
+let pfVideo = null;
 let pfTierPrices = {};
 let pfEditingProductId = null;
 
@@ -333,13 +334,34 @@ function renderPfTierPrices(p){
   }).join('');
 }
 
+function renderPfMediaPreview(){
+  const el = document.getElementById('pf_media_preview');
+  if(!el) return;
+  const imageThumbs = pfImages.map((src, i) => `
+    <div class="media-thumb">
+      <img src="${src}" alt="">
+      <button type="button" onclick="removePfImage(${i})">✕</button>
+    </div>
+  `).join('');
+  const videoThumb = pfVideo ? `
+    <div class="media-thumb">
+      <video src="${pfVideo}" muted></video>
+      <button type="button" onclick="removePfVideo()">✕</button>
+    </div>
+  ` : '';
+  el.innerHTML = imageThumbs + videoThumb;
+}
+function removePfImage(i){ pfImages.splice(i, 1); renderPfMediaPreview(); }
+function removePfVideo(){ pfVideo = null; renderPfMediaPreview(); }
+
 function openProductEditor(productId){
   const p = productId ? PRODUCTS.find(x => x.id === productId) : null;
   pfEditingProductId = productId || null;
   pfColors = p ? p.variants.colors.map(c => ({...c})) : [];
   pfPatterns = p ? (p.variants.patterns || []).map(pt => ({...pt})) : [];
   pfModelVariants = p ? p.variants.models.map(m => ({...m})) : [];
-  pfUploadedImage = p ? p.image : null;
+  pfImages = p && p.variants.media && p.variants.media.images ? [...p.variants.media.images] : (p && p.image ? [p.image] : []);
+  pfVideo = p && p.variants.media ? (p.variants.media.video || null) : null;
   pfTierPrices = p ? Object.assign({}, p.tierPrices) : {};
 
   const catOptions = CATEGORIES.map(c => `<option value="${c.key}" ${p && p.brand===c.key ? 'selected':''}>${c.label}</option>`).join('');
@@ -389,8 +411,21 @@ function openProductEditor(productId){
         <div id="pf_tier_prices"></div>
       </div>
       <div style="margin-top:16px;">
-        <label>Ürün Fotoğrafı</label>
-        <input class="admin-input" id="pf_image" type="file" accept="image/*">
+        <label>Ürün Fotoğrafları ve Videosu</label>
+        <p class="muted-note" style="margin:0 0 10px;">Birden fazla fotoğraf ekleyebilirsin, istersen bir de video ekle.</p>
+        <div class="media-upload-row">
+          <label class="media-upload-btn" for="pf_images_input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            Fotoğraf Ekle
+          </label>
+          <input type="file" id="pf_images_input" accept="image/*" multiple style="display:none;">
+          <label class="media-upload-btn" for="pf_video_input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            Video Ekle
+          </label>
+          <input type="file" id="pf_video_input" accept="video/*" style="display:none;">
+        </div>
+        <div class="media-preview-grid" id="pf_media_preview"></div>
       </div>
       <div class="admin-form-actions" style="margin-top:20px;">
         <button class="btn btn-primary" id="pf_save">${p ? 'Kaydet' : 'Ürünü Ekle'}</button>
@@ -405,6 +440,7 @@ function openProductEditor(productId){
   renderPfMarkaPicker();
   renderPfModelOptions();
   renderPfTierPrices(p);
+  renderPfMediaPreview();
   enterProductEditMode();
 
   document.getElementById('pf_back').addEventListener('click', exitProductEditMode);
@@ -428,12 +464,21 @@ function openProductEditor(productId){
   });
   document.getElementById('pf_device').addEventListener('change', renderPfModelOptions);
 
-  document.getElementById('pf_image').addEventListener('change', (e) => {
+  document.getElementById('pf_images_input').addEventListener('change', (e) => {
+    Array.from(e.target.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => { pfImages.push(reader.result); renderPfMediaPreview(); };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  });
+  document.getElementById('pf_video_input').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
-    reader.onload = () => { pfUploadedImage = reader.result; };
+    reader.onload = () => { pfVideo = reader.result; renderPfMediaPreview(); };
     reader.readAsDataURL(file);
+    e.target.value = '';
   });
 
   document.getElementById('pf_save').addEventListener('click', () => {
@@ -451,17 +496,19 @@ function openProductEditor(productId){
       tierPrices[input.dataset.tierPrice] = val === '' ? null : parseFloat(val);
     });
 
+    const media = {images: [...pfImages], video: pfVideo};
     if(p){
       p.name = name; p.price = price; p.brand = brand; p.device = device;
       p.stock = stock; p.lowStockThreshold = threshold;
-      p.variants = {colors: pfColors.map(c=>({...c})), patterns: pfPatterns.map(pt=>({...pt})), models: pfModelVariants.map(m=>({...m}))};
+      p.variants = {colors: pfColors.map(c=>({...c})), patterns: pfPatterns.map(pt=>({...pt})), models: pfModelVariants.map(m=>({...m})), media};
       p.tierPrices = tierPrices;
-      if(pfUploadedImage) p.image = pfUploadedImage;
+      p.image = pfImages[0] || null;
     } else {
       PRODUCTS.push({
         id: nextProductId++, name, price, brand, sub: device, device,
         screen: 'linear-gradient(160deg,#c9cfd8,#eef1f5)', tag: null, universal: true,
-        stock, lowStockThreshold: threshold, image: pfUploadedImage, variants:{colors: pfColors.map(c=>({...c})), patterns: pfPatterns.map(pt=>({...pt})), models: pfModelVariants.map(m=>({...m}))},
+        stock, lowStockThreshold: threshold, image: pfImages[0] || null,
+        variants:{colors: pfColors.map(c=>({...c})), patterns: pfPatterns.map(pt=>({...pt})), models: pfModelVariants.map(m=>({...m})), media},
         tierPrices,
       });
     }
