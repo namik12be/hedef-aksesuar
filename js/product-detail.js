@@ -39,6 +39,7 @@ function showProductDetail(id){
   document.getElementById('productsView').style.display = 'none';
   document.getElementById('adminView').style.display = 'none';
   document.getElementById('profileView').style.display = 'none';
+  document.getElementById('faqView').style.display = 'none';
   document.getElementById('productDetailView').style.display = 'block';
   window.scrollTo(0, 0);
   renderProductDetail();

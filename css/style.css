@@ -313,7 +313,7 @@
   .cat-sub-item.active{color:var(--red); font-weight:700; background:#FFECEA;}
 
   .grid{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:22px;
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:22px;
   }
   .featured-grid{grid-template-columns:repeat(4, 1fr);}
 
@@ -454,7 +454,7 @@
     text-align:left; padding:12px; color:var(--muted); font-weight:700; font-size:12px;
     text-transform:uppercase; letter-spacing:.03em; border-bottom:1.5px solid var(--line); white-space:nowrap;
   }
-  .admin-table td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:middle;}
+  .admin-table td{padding:10px 12px; border-bottom:2px solid var(--line); vertical-align:middle;}
   .admin-thumb{
     width:44px; height:44px; border-radius:8px; background:var(--bg-soft); display:flex; align-items:center; justify-content:center; overflow:hidden; font-size:18px;
   }

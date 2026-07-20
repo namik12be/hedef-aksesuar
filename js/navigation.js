@@ -47,9 +47,29 @@ function restoreLastView(){
     if(view === 'products') showProducts();
     else if(view === 'admin') showAdmin();
     else if(view === 'profile') showProfile();
+    else if(view === 'faq') showFaq();
     else if(view === 'productDetail' && extra) showProductDetail(extra);
   } catch(e){}
 }
+
+let faqReturnView = 'home';
+function showFaq(){
+  saveLastView('faq');
+  faqReturnView = currentMainView();
+  document.body.classList.remove('admin-mode');
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('productsView').style.display = 'none';
+  document.getElementById('adminView').style.display = 'none';
+  document.getElementById('profileView').style.display = 'none';
+  document.getElementById('productDetailView').style.display = 'none';
+  document.getElementById('faqView').style.display = 'block';
+  window.scrollTo(0, 0);
+  const openAnswer = document.querySelector('#faqList .faq-item.open .faq-answer');
+  if(openAnswer) openAnswer.style.maxHeight = openAnswer.scrollHeight + 'px';
+}
+document.getElementById('faqBackBtn').addEventListener('click', () => {
+  if(faqReturnView === 'products') showProducts(); else showHome();
+});
 
 function showHome(){
   saveLastView('home');
@@ -59,6 +79,7 @@ function showHome(){
   document.getElementById('adminView').style.display = 'none';
   document.getElementById('profileView').style.display = 'none';
   document.getElementById('productDetailView').style.display = 'none';
+  document.getElementById('faqView').style.display = 'none';
   window.scrollTo(0, 0);
 }
 function showProducts(){
@@ -69,6 +90,7 @@ function showProducts(){
   document.getElementById('adminView').style.display = 'none';
   document.getElementById('profileView').style.display = 'none';
   document.getElementById('productDetailView').style.display = 'none';
+  document.getElementById('faqView').style.display = 'none';
   window.scrollTo(0, 0);
 }
 function showAdmin(){
@@ -78,6 +100,7 @@ function showAdmin(){
   document.getElementById('productsView').style.display = 'none';
   document.getElementById('profileView').style.display = 'none';
   document.getElementById('productDetailView').style.display = 'none';
+  document.getElementById('faqView').style.display = 'none';
   document.getElementById('adminView').style.display = 'block';
   window.scrollTo(0, 0);
   if(adminUnlocked){
@@ -97,6 +120,7 @@ function showProfile(){
   document.getElementById('productsView').style.display = 'none';
   document.getElementById('adminView').style.display = 'none';
   document.getElementById('productDetailView').style.display = 'none';
+  document.getElementById('faqView').style.display = 'none';
   document.getElementById('profileView').style.display = 'block';
   window.scrollTo(0, 0);
   renderProfileView();
@@ -114,10 +138,14 @@ document.addEventListener('click', (e) => {
   const goHome = e.target.closest('[data-goto="home"]');
   const goLogo = e.target.closest('[data-goto="logo"]');
   const goProfile = e.target.closest('[data-goto="profile"]');
+  const goFaq = e.target.closest('[data-goto="faq"]');
   const goSection = e.target.closest('[data-goto-section]');
   if(goProducts){
     e.preventDefault();
     showProducts();
+  } else if(goFaq){
+    e.preventDefault();
+    showFaq();
   } else if(goLogo){
     e.preventDefault();
     if(document.getElementById('adminView').style.display !== 'none' && document.getElementById('adminDashboard').style.display !== 'none'){
@@ -164,9 +192,6 @@ document.getElementById('faqList').addEventListener('click', (e) => {
     const answer = item.querySelector('.faq-answer');
     answer.style.maxHeight = answer.scrollHeight + 'px';
   }
-});
-document.querySelectorAll('#faqList .faq-item.open .faq-answer').forEach(answer => {
-  answer.style.maxHeight = answer.scrollHeight + 'px';
 });
 
 const SOCIAL_ICONS = {
