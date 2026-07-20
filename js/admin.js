@@ -652,7 +652,24 @@ function addDeviceType(){
 function renderDeviceTypeList(){
   const el = document.getElementById('deviceTypeList');
   if(!el) return;
-  el.innerHTML = DEVICE_TYPES.map(d => `<span class="brand-model-chip">${d.label}</span>`).join('');
+  el.innerHTML = DEVICE_TYPES.map(d => `<span class="brand-model-chip">${d.label}<button type="button" class="chip-remove-btn" onclick="removeDeviceType('${d.key}')">✕</button></span>`).join('');
+}
+function removeDeviceType(key){
+  const dt = DEVICE_TYPES.find(d => d.key === key);
+  if(!dt) return;
+  const inUse = MARKALAR.some(m => m.models.some(md => md.device === key));
+  const doDelete = () => {
+    DEVICE_TYPES = DEVICE_TYPES.filter(d => d.key !== key);
+    renderDeviceTypeList();
+    renderBrandManager();
+    deleteRowFromSupabase('device_types', 'key', key);
+    scheduleSupabaseSync();
+  };
+  if(inUse){
+    showCustomConfirm(`"${dt.label}" cihaz tipini kullanan modeller var. Yine de silmek istediğine emin misin?`, doDelete);
+  } else {
+    doDelete();
+  }
 }
 document.getElementById('addBrandBtn').addEventListener('click', () => {
   const input = document.getElementById('newBrandInput');

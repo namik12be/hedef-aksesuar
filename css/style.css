@@ -443,7 +443,10 @@
     max-height:0; overflow:hidden; transition:max-height .3s ease;
     margin-top:0; padding-top:0; border-top:none;
   }
-  .stock-variant-section.open{max-height:1400px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line);}
+  .stock-variant-section.open{
+    max-height:560px; overflow-y:auto; overflow-x:hidden;
+    margin-top:16px; padding-top:16px; border-top:1px solid var(--line);
+  }
   .stock-grid-wrap{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
   .stock-grid-block{min-width:0;}
   .stock-variant-group-label{font-size:12px; font-weight:700; color:var(--ink); margin:0 0 10px;}
