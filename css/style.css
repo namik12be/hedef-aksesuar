@@ -137,7 +137,8 @@
     transition:background .2s ease;
   }
   .icon-btn:hover{background:var(--bg-soft);}
-  .icon-btn.has-label{width:auto; border-radius:100px; padding:0 16px 0 12px; gap:8px;}
+  .icon-btn.has-label{width:auto; border-radius:100px; padding:9px 16px 9px 12px; gap:8px; border:1.5px solid var(--line);}
+  .icon-btn.has-label:hover{border-color:var(--ink); background:var(--bg-soft);}
   #accountBtnLabel{font-size:13.5px; font-weight:700; white-space:nowrap;}
   #accountBtnLabel:empty{display:none;}
   .cart-count{
