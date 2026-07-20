@@ -625,14 +625,18 @@ function removeBrand(key){
     deleteRowFromSupabase('brands', 'key', key);
   });
 }
+function titleCaseModelName(str){
+  return str.replace(/\S+/g, word => word.charAt(0).toUpperCase() + word.slice(1));
+}
 function addModel(brandKey){
   const input = document.getElementById('newModelInput_' + brandKey);
   const deviceSel = document.getElementById('newModelDevice_' + brandKey);
-  const label = input.value.trim();
+  const label = titleCaseModelName(input.value.trim());
   if(!label) return;
   const marka = MARKALAR.find(m => m.key === brandKey);
   const key = label.toLowerCase().replace(/[^a-z0-9]+/gi, '-');
   marka.models.push({key, label, device: deviceSel.value});
+  marka.models.sort((a, b) => a.label.localeCompare(b.label, 'tr'));
   MODEL_TO_MARKA[key] = brandKey;
   renderBrandManager();
   scheduleSupabaseSync();

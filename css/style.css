@@ -23,12 +23,12 @@
     --status-green-bg:#EAF7EC; --status-green-text:#1E7B34;
   }
   :root[data-theme="dark"]{
-    --bg:#18181C;
-    --bg-soft:#1E1E23;
-    --surface:#232329;
+    --bg:#303030;
+    --bg-soft:#383838;
+    --surface:#424242;
     --ink:#EDEDEC;
-    --muted:#9C9CA6;
-    --line:#38383F;
+    --muted:#B4B4B8;
+    --line:#4D4D4D;
     --shadow: 0 10px 30px rgba(0,0,0,0.45);
     --solid:#EDEDEC;
     --solid-text:#18181C;
