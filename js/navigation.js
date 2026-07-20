@@ -178,6 +178,51 @@ window.addEventListener('scroll', () => {
   document.querySelector('header').classList.toggle('scrolled', window.scrollY > 30);
 });
 
+/* ---- Header ürün arama ---- */
+function renderHeaderSearchResults(query){
+  const el = document.getElementById('headerSearchResults');
+  const q = normalizeTr(query.trim());
+  if(!q){ el.style.display = 'none'; el.innerHTML = ''; return; }
+  const matches = PRODUCTS.filter(p => normalizeTr(p.name).includes(q)).slice(0, 8);
+  el.style.display = 'block';
+  if(matches.length === 0){
+    el.innerHTML = `<div class="nav-search-empty">Sonuç bulunamadı.</div>`;
+    return;
+  }
+  el.innerHTML = matches.map(p => `
+    <div class="nav-search-result-item" onclick="goToHeaderSearchResult(${p.id})">
+      <div class="nav-search-result-thumb" style="background:${p.screen || 'var(--bg-soft)'};"></div>
+      <div>
+        <div class="nav-search-result-name">${p.name}</div>
+        <div class="nav-search-result-price">${fmtTRY(p.price)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+function goToHeaderSearchResult(id){
+  document.getElementById('headerSearchInput').value = '';
+  document.getElementById('headerSearchResults').style.display = 'none';
+  showProductDetail(id);
+}
+document.getElementById('headerSearchInput').addEventListener('input', (e) => {
+  renderHeaderSearchResults(e.target.value);
+});
+document.getElementById('headerSearchInput').addEventListener('focus', (e) => {
+  if(e.target.value.trim()) renderHeaderSearchResults(e.target.value);
+});
+document.getElementById('headerSearchInput').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    const q = normalizeTr(e.target.value.trim());
+    if(!q) return;
+    const first = PRODUCTS.find(p => normalizeTr(p.name).includes(q));
+    if(first) goToHeaderSearchResult(first.id);
+  }
+});
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('#headerSearchWrap')) document.getElementById('headerSearchResults').style.display = 'none';
+});
+
 document.getElementById('faqList').addEventListener('click', (e) => {
   const btn = e.target.closest('.faq-question');
   if(!btn) return;

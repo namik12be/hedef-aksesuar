@@ -122,10 +122,26 @@ function renderLowStockList(){
 }
 
 /* ---- Ürünler ---- */
+let adminProductSearch = '';
+let adminProductCategoryFilter = 'tumu';
+
+function renderAdminProductFilterChips(){
+  const el = document.getElementById('adminProductFilterChips');
+  if(!el) return;
+  const chips = [{key:'tumu', label:'Tümü'}, ...CATEGORIES.map(c => ({key:c.key, label:c.label}))];
+  el.innerHTML = chips.map(c => `<button class="chip ${adminProductCategoryFilter===c.key?'active':''}" data-catfilter="${c.key}">${c.label}</button>`).join('');
+}
 
 function renderProductsTable(){
-  document.getElementById('productCountLabel').textContent = `(${PRODUCTS.length})`;
-  document.getElementById('productsTableBody').innerHTML = PRODUCTS.map(p => `
+  renderAdminProductFilterChips();
+  const search = normalizeTr(adminProductSearch);
+  const list = PRODUCTS.filter(p => {
+    if(adminProductCategoryFilter !== 'tumu' && p.brand !== adminProductCategoryFilter) return false;
+    if(search && !normalizeTr(p.name).includes(search)) return false;
+    return true;
+  });
+  document.getElementById('productCountLabel').textContent = `(${list.length})`;
+  document.getElementById('productsTableBody').innerHTML = list.length ? list.map(p => `
     <tr>
       <td><div class="admin-thumb">${p.image ? `<img src="${p.image}">` : '📦'}</div></td>
       <td>${p.name}</td>
@@ -138,8 +154,18 @@ function renderProductsTable(){
         <button class="admin-action-btn danger" onclick="deleteProduct(${p.id})">🗑 Sil</button>
       </td>
     </tr>
-  `).join('');
+  `).join('') : `<tr><td colspan="7"><p class="muted-note" style="margin:10px 0;">Bu aramaya/filtreye uyan ürün bulunamadı.</p></td></tr>`;
 }
+document.getElementById('adminProductSearchInput').addEventListener('input', (e) => {
+  adminProductSearch = e.target.value;
+  renderProductsTable();
+});
+document.getElementById('adminProductFilterChips').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-catfilter]');
+  if(!btn) return;
+  adminProductCategoryFilter = btn.dataset.catfilter;
+  renderProductsTable();
+});
 
 function stockBadgeHTML(p){
   if(p.stock <= 0) return `<span class="stock-badge stock-out">Tükendi</span>`;
