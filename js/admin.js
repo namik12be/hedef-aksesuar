@@ -420,7 +420,7 @@ function openProductEditor(productId){
           </label>
           <input type="file" id="pf_images_input" accept="image/*" multiple style="display:none;">
           <label class="media-upload-btn" for="pf_video_input">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
             Video Ekle
           </label>
           <input type="file" id="pf_video_input" accept="video/*" style="display:none;">
