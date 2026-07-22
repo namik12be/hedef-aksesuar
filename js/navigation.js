@@ -261,6 +261,17 @@ function renderFooterSocial(){
   }).join('');
 }
 
+/* ---- Ana sayfa metin özelleştirmeleri (admin "Ana Sayfa Düzenle" panelinden gelir) ---- */
+function captureDefaultHomeContent(){
+  document.querySelectorAll('#homeView [data-hk]').forEach(el => { DEFAULT_HOME_CONTENT[el.dataset.hk] = el.innerHTML; });
+}
+function applyHomeContentOverrides(){
+  document.querySelectorAll('#homeView [data-hk]').forEach(el => {
+    const k = el.dataset.hk;
+    el.innerHTML = (HOME_CONTENT[k] !== undefined && HOME_CONTENT[k] !== '') ? HOME_CONTENT[k] : (DEFAULT_HOME_CONTENT[k] || '');
+  });
+}
+
 document.getElementById('newsletterSubscribeBtn').addEventListener('click', () => {
   const input = document.getElementById('newsletterEmail');
   const email = input.value.trim();

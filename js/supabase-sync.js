@@ -83,7 +83,7 @@ async function deleteRowFromSupabase(table, keyCol, keyValue){
 
 async function syncAllToSupabase(){
   try {
-    const settingsRows = [{key:'social_links', value: SOCIAL_LINKS}];
+    const settingsRows = [{key:'social_links', value: SOCIAL_LINKS}, {key:'home_content', value: HOME_CONTENT}];
     if(window.usdRateManual){ settingsRows.push({key:'usd_rate', value:{rate:usdRate, source:usdRateSource}}); }
     await Promise.all([
       upsertTable('products', PRODUCTS.map(productToRow), 'id'),
@@ -163,12 +163,14 @@ async function loadAllFromSupabase(){
     if(settingsRes.data){
       const social = settingsRes.data.find(s => s.key === 'social_links');
       if(social && social.value) Object.assign(SOCIAL_LINKS, social.value);
+      const home = settingsRes.data.find(s => s.key === 'home_content');
+      if(home && home.value) Object.assign(HOME_CONTENT, home.value);
       const rate = settingsRes.data.find(s => s.key === 'usd_rate');
       if(rate && rate.value){ usdRate = rate.value.rate; usdRateSource = rate.value.source; window.usdRateManual = true; }
     }
 
     renderFeaturedRows(); renderMarkaChips(); renderModelChips(); renderSidebar(); renderGrid();
-    updateCart(); renderFooterSocial();
+    updateCart(); renderFooterSocial(); applyHomeContentOverrides();
     if(typeof renderRateDisplay === 'function') renderRateDisplay();
     if(adminUnlocked && document.getElementById('adminDashboard').style.display !== 'none') renderAdminAll();
   } catch(e){

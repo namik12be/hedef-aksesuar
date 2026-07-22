@@ -91,6 +91,7 @@ function renderAdminAll(){
   renderRateDisplay();
   renderSocialLinksForm();
   renderNewsletterAdminList();
+  renderHomeEditor();
 }
 
 /* ---- Genel Bakış ---- */
@@ -1140,6 +1141,145 @@ function setOrderStatus(orderId, status){
   showToast(`Sipariş #${orderId} durumu güncellendi: ${ORDER_STATUS_LABELS[status]} (demo bildirim)`);
   scheduleSupabaseSync();
 }
+
+/* ---- Ana Sayfa Düzenle ----
+   Önizleme, gerçek ana sayfayla aynı class'ları (hero/strip/featured-row-head) kullanır ki
+   görünüm birebir aynı olsun. Sadece metin alanları contenteditable; buton yazıları
+   ("Ürünleri Keşfet", "Tümünü Gör →") kasıtlı olarak pointer-events:none span'lar — kullanıcı
+   isteğiyle bunlar değiştirilemez ve tıklanamaz (siteyi başka sayfaya götürmesin diye). ---- */
+const HOME_EDITOR_STRIP_ICONS = [
+  '<rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+  '<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>',
+  '<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"/>',
+  '<rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>',
+];
+const HOME_EDITOR_ICONS = [
+  '<path d="M20 6L9 17l-5-5"/>',
+  '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+  '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  '<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>',
+  '<path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.58a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.82z"/><circle cx="7.5" cy="7.5" r="1"/>',
+  '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+];
+
+function homeContentFieldValue(key){
+  return (HOME_CONTENT[key] !== undefined && HOME_CONTENT[key] !== '') ? HOME_CONTENT[key] : (DEFAULT_HOME_CONTENT[key] || '');
+}
+
+let homeEditorHistory = [];
+let homeEditorHistoryIndex = -1;
+
+function renderHomeEditor(){
+  const el = document.getElementById('homeEditorPreview');
+  if(!el) return;
+  el.innerHTML = `
+    <div class="hero" style="padding:20px 0 4px;">
+      <div class="wrap" style="max-width:100%; padding:0; display:block;">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> <span class="home-editable" contenteditable="true" data-hk="eyebrow">${homeContentFieldValue('eyebrow')}</span></div>
+          <h1 class="home-editable" contenteditable="true" data-hk="heroHeading">${homeContentFieldValue('heroHeading')}</h1>
+          <p class="lead home-editable" contenteditable="true" data-hk="heroLead">${homeContentFieldValue('heroLead')}</p>
+          <div class="hero-ctas"><span class="btn btn-primary" style="pointer-events:none;">Ürünleri Keşfet</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="strip" style="border-radius:12px; margin:14px 0;">
+      <div class="wrap" style="max-width:100%; padding:16px;">
+        ${[1,2,3,4].map(i => `<div class="strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${HOME_EDITOR_STRIP_ICONS[i-1]}</svg> <span class="home-editable" contenteditable="true" data-hk="strip${i}">${homeContentFieldValue('strip'+i)}</span></div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      ${[1,2,3].map(i => `<div class="featured-row-head" style="margin-bottom:0;"><h2 class="home-editable" contenteditable="true" data-hk="featuredHeading${i}">${homeContentFieldValue('featuredHeading'+i)}</h2><span class="see-all-btn" style="pointer-events:none; opacity:.6;">Tümünü Gör →</span></div>`).join('')}
+    </div>`;
+  homeEditorHistory = [captureHomeEditorSnapshot()];
+  homeEditorHistoryIndex = 0;
+  updateHomeEditorUndoRedoButtons();
+}
+
+function captureHomeEditorSnapshot(){
+  const snap = {};
+  document.querySelectorAll('#homeEditorPreview [data-hk]').forEach(elx => { snap[elx.dataset.hk] = elx.innerHTML; });
+  return snap;
+}
+function applyHomeEditorSnapshot(snap){
+  document.querySelectorAll('#homeEditorPreview [data-hk]').forEach(elx => {
+    if(snap[elx.dataset.hk] !== undefined) elx.innerHTML = snap[elx.dataset.hk];
+  });
+}
+function pushHomeEditorHistory(){
+  homeEditorHistory = homeEditorHistory.slice(0, homeEditorHistoryIndex + 1);
+  homeEditorHistory.push(captureHomeEditorSnapshot());
+  homeEditorHistoryIndex++;
+  updateHomeEditorUndoRedoButtons();
+}
+function updateHomeEditorUndoRedoButtons(){
+  const undoBtn = document.getElementById('homeEditorUndoBtn');
+  const redoBtn = document.getElementById('homeEditorRedoBtn');
+  if(!undoBtn) return;
+  undoBtn.disabled = homeEditorHistoryIndex <= 0;
+  redoBtn.disabled = homeEditorHistoryIndex >= homeEditorHistory.length - 1;
+}
+document.getElementById('homeEditorUndoBtn').addEventListener('click', () => {
+  if(homeEditorHistoryIndex <= 0) return;
+  homeEditorHistoryIndex--;
+  applyHomeEditorSnapshot(homeEditorHistory[homeEditorHistoryIndex]);
+  updateHomeEditorUndoRedoButtons();
+});
+document.getElementById('homeEditorRedoBtn').addEventListener('click', () => {
+  if(homeEditorHistoryIndex >= homeEditorHistory.length - 1) return;
+  homeEditorHistoryIndex++;
+  applyHomeEditorSnapshot(homeEditorHistory[homeEditorHistoryIndex]);
+  updateHomeEditorUndoRedoButtons();
+});
+
+let homeEditorInputDebounce = null;
+document.getElementById('homeEditorPreview').addEventListener('input', (e) => {
+  if(!e.target.closest('[data-hk]')) return;
+  clearTimeout(homeEditorInputDebounce);
+  homeEditorInputDebounce = setTimeout(pushHomeEditorHistory, 500);
+});
+
+/* mousedown + preventDefault: contenteditable'daki metin seçimi butona tıklarken kaybolmasın */
+document.getElementById('homeEditorToolbar').addEventListener('mousedown', (e) => {
+  const swatch = e.target.closest('.home-color-swatch');
+  if(!swatch) return;
+  e.preventDefault();
+  document.execCommand('styleWithCSS', false, true);
+  if(swatch.dataset.hcolor === 'reset') document.execCommand('removeFormat');
+  else document.execCommand('foreColor', false, swatch.dataset.hcolor);
+  pushHomeEditorHistory();
+});
+
+document.getElementById('homeEditorIconPicker').innerHTML = HOME_EDITOR_ICONS.map((svg, i) => `
+  <button class="home-icon-btn" data-hicon="${i}" title="İkon ekle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${svg}</svg></button>
+`).join('');
+document.getElementById('homeEditorIconPicker').addEventListener('mousedown', (e) => {
+  const btn = e.target.closest('.home-icon-btn');
+  if(!btn) return;
+  e.preventDefault();
+  const svg = HOME_EDITOR_ICONS[Number(btn.dataset.hicon)];
+  const iconHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin:0 2px;">${svg}</svg>`;
+  document.execCommand('insertHTML', false, iconHTML);
+  pushHomeEditorHistory();
+});
+
+document.getElementById('homeEditorSaveBtn').addEventListener('click', () => {
+  document.querySelectorAll('#homeEditorPreview [data-hk]').forEach(elx => { HOME_CONTENT[elx.dataset.hk] = elx.innerHTML; });
+  applyHomeContentOverrides();
+  showToast('Ana sayfa güncellendi ve kaydedildi ✓');
+  scheduleSupabaseSync();
+});
+
+document.getElementById('homeEditorRevertBtn').addEventListener('click', () => {
+  showCustomConfirm('Ana sayfadaki tüm özelleştirmeler silinip orijinal haline dönülecek. Emin misin?', () => {
+    Object.keys(HOME_CONTENT).forEach(k => delete HOME_CONTENT[k]);
+    applyHomeContentOverrides();
+    renderHomeEditor();
+    showToast('Ana sayfa orijinal haline döndürüldü.');
+    scheduleSupabaseSync();
+  });
+});
 
 /* ---- Ayarlar ---- */
 function renderRateDisplay(){

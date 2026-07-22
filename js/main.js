@@ -1,3 +1,4 @@
+captureDefaultHomeContent();
 restoreUserSession();
 restoreAdminAuthState();
 restoreLastView();

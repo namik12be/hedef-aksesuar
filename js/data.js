@@ -195,3 +195,6 @@ let SOCIAL_LINKS = {
   whatsapp: '',
 };
 let NEWSLETTER_SUBSCRIBERS = [];
+
+let HOME_CONTENT = {};        // {anahtar: özelleştirilmiş innerHTML} — boşsa orijinal (DEFAULT_HOME_CONTENT) kullanılır
+let DEFAULT_HOME_CONTENT = {}; // sayfa ilk yüklendiğinde main.js tarafından doldurulur, "Orijinale Dön" için taban
