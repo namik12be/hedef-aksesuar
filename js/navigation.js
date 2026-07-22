@@ -240,46 +240,25 @@ document.getElementById('faqList').addEventListener('click', (e) => {
 });
 
 const SOCIAL_ICONS = {
+  whatsapp: '<path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.5 14.02c-.23.65-1.36 1.24-1.87 1.31-.48.07-1.09.1-1.76-.11-.4-.13-.92-.3-1.58-.58-2.78-1.2-4.6-4-4.74-4.19-.14-.19-1.14-1.51-1.14-2.89 0-1.37.72-2.04.97-2.32.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.9.85 2.04.07.14.11.3.02.48-.09.18-.14.3-.28.46-.14.16-.29.36-.42.48-.14.13-.28.28-.12.55.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.36-.23.6-.14.25.09 1.58.75 1.85.88.28.14.46.2.53.32.07.11.07.65-.16 1.3z"/>',
   facebook: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
   instagram: '<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>',
   twitter: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
 };
-const SOCIAL_LABELS = {facebook: 'Facebook', instagram: 'Instagram', twitter: 'Twitter (X)'};
+const SOCIAL_LABELS = {whatsapp: 'WhatsApp', facebook: 'Facebook', instagram: 'Instagram', twitter: 'Twitter (X)'};
 
 function renderFooterSocial(){
   const el = document.getElementById('footSocialLinks');
-  if(el){
-    el.innerHTML = Object.keys(SOCIAL_ICONS).map(key => {
-      const href = (SOCIAL_LINKS[key] && SOCIAL_LINKS[key].trim()) ? SOCIAL_LINKS[key].trim() : '#';
-      return `<a class="foot-social-btn" href="${href}" target="_blank" rel="noopener" aria-label="${SOCIAL_LABELS[key]}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${SOCIAL_ICONS[key]}</svg></a>`;
-    }).join('');
-  }
-  renderWhatsappLinks();
-}
-
-function renderWhatsappLinks(){
-  const rawNumber = (SOCIAL_LINKS.whatsapp || '').trim();
-  const digits = rawNumber.replace(/\D/g, '');
-  const navLink = document.getElementById('navWhatsappLink');
-  const footLink = document.getElementById('footWhatsappLink');
-  if(navLink){
-    if(digits){
-      navLink.href = `https://wa.me/${digits}`;
-      navLink.style.display = '';
-    } else {
-      navLink.href = '#';
-      navLink.style.display = 'none';
+  if(!el) return;
+  el.innerHTML = Object.keys(SOCIAL_ICONS).map(key => {
+    if(key === 'whatsapp'){
+      const digits = (SOCIAL_LINKS.whatsapp || '').replace(/\D/g, '');
+      if(!digits) return '';
+      return `<a class="foot-social-btn" href="https://wa.me/${digits}" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">${SOCIAL_ICONS.whatsapp}</svg></a>`;
     }
-  }
-  if(footLink){
-    if(digits){
-      footLink.href = `https://wa.me/${digits}`;
-      footLink.style.display = '';
-    } else {
-      footLink.href = '#';
-      footLink.style.display = 'none';
-    }
-  }
+    const href = (SOCIAL_LINKS[key] && SOCIAL_LINKS[key].trim()) ? SOCIAL_LINKS[key].trim() : '#';
+    return `<a class="foot-social-btn" href="${href}" target="_blank" rel="noopener" aria-label="${SOCIAL_LABELS[key]}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${SOCIAL_ICONS[key]}</svg></a>`;
+  }).join('');
 }
 
 document.getElementById('newsletterSubscribeBtn').addEventListener('click', () => {
