@@ -19,15 +19,16 @@ function setThemePreference(pref){
   renderThemeToggle();
 }
 function renderThemeToggle(){
-  const el = document.getElementById('themeToggle');
-  if(!el) return;
+  const els = document.querySelectorAll('.theme-toggle');
+  if(!els.length) return;
   const current = getThemePreference();
   const options = [
     {key: 'light', label: 'Açık', icon: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'},
     {key: 'dark', label: 'Koyu', icon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'},
     {key: 'system', label: 'Sistem', icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'},
   ];
-  el.innerHTML = options.map(o => `<button class="theme-toggle-btn ${current === o.key ? 'active' : ''}" onclick="setThemePreference('${o.key}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${o.icon}</svg>${o.label}</button>`).join('');
+  const html = options.map(o => `<button class="theme-toggle-btn ${current === o.key ? 'active' : ''}" onclick="setThemePreference('${o.key}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${o.icon}</svg>${o.label}</button>`).join('');
+  els.forEach(el => el.innerHTML = html);
 }
 if(window.matchMedia){
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {

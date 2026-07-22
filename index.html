@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=24" onload="window.__revealBody()" onerror="window.__revealBody()">
+<link rel="stylesheet" href="css/style.css?v=25" onload="window.__revealBody()" onerror="window.__revealBody()">
 </head>
 <body>
 
@@ -33,10 +33,13 @@
         <a href="#iletisim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>İletişim</a>
       </nav>
       <button class="admin-exit-btn" id="adminExitBtn" data-goto="home">← Panelden Çık</button>
-      <button class="icon-btn" id="accountBtn" data-goto="profile" aria-label="Hesabım">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span id="accountBtnLabel"></span>
-      </button>
+      <div class="account-menu-anchor">
+        <button class="icon-btn" id="accountBtn" aria-label="Hesabım">
+          <span id="accountBtnIcon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <span id="accountBtnLabel"></span>
+        </button>
+        <div class="account-menu" id="accountMenu"></div>
+      </div>
       <button class="icon-btn" id="cartBtn" aria-label="Sepeti aç">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         <span class="cart-count" id="cartCount">0</span>
@@ -571,16 +574,16 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="js/data.js?v=24"></script>
-<script src="js/utils.js?v=24"></script>
-<script src="js/shop.js?v=24"></script>
-<script src="js/cart.js?v=24"></script>
-<script src="js/navigation.js?v=24"></script>
-<script src="js/auth-profile.js?v=24"></script>
-<script src="js/product-detail.js?v=24"></script>
-<script src="js/admin.js?v=24"></script>
-<script src="js/supabase-sync.js?v=24"></script>
-<script src="js/main.js?v=24"></script>
+<script src="js/data.js?v=25"></script>
+<script src="js/utils.js?v=25"></script>
+<script src="js/shop.js?v=25"></script>
+<script src="js/cart.js?v=25"></script>
+<script src="js/navigation.js?v=25"></script>
+<script src="js/auth-profile.js?v=25"></script>
+<script src="js/product-detail.js?v=25"></script>
+<script src="js/admin.js?v=25"></script>
+<script src="js/supabase-sync.js?v=25"></script>
+<script src="js/main.js?v=25"></script>
 
 </body>
 </html>

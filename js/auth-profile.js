@@ -26,14 +26,102 @@ let activeAccountSection = 'siparisler';
 function updateAccountButton(){
   const btn = document.getElementById('accountBtn');
   const label = document.getElementById('accountBtnLabel');
+  const iconWrap = document.getElementById('accountBtnIcon');
   if(currentUser){
     label.textContent = '';
     btn.classList.remove('has-label');
+    iconWrap.innerHTML = currentUser.photo
+      ? `<img src="${currentUser.photo}" class="account-btn-avatar">`
+      : `<span class="account-btn-avatar account-btn-avatar-fallback">${currentUser.displayName.charAt(0).toUpperCase()}</span>`;
   } else {
     label.textContent = 'Giriş Yap / Kayıt Ol';
     btn.classList.add('has-label');
+    iconWrap.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+    toggleAccountMenu(false);
   }
 }
+
+/* Yeni hesap açılır menüsü (header'daki avatar tıklanınca).
+   Eski tam-sayfa profil (giriş/kayıt + bölümler) korunuyor; menü öğeleri
+   o sayfanın ilgili bölümüne yönlendiriyor. Beğenilmezse accountBtn'in
+   click listener'ı aşağıda tek yerde, kolayca eski showProfile() davranışına
+   döndürülebilir. */
+function toggleAccountMenu(forceState){
+  const el = document.getElementById('accountMenu');
+  if(!el) return;
+  const next = typeof forceState === 'boolean' ? forceState : !el.classList.contains('open');
+  el.classList.toggle('open', next);
+  if(next) renderAccountMenu();
+}
+
+function renderAccountMenu(){
+  const el = document.getElementById('accountMenu');
+  if(!el || !currentUser) return;
+  const isAdmin = currentUser.role === 'admin';
+  el.innerHTML = `
+    <div class="account-menu-head">
+      <div class="account-menu-avatar">${currentUser.photo ? `<img src="${currentUser.photo}">` : currentUser.displayName.charAt(0).toUpperCase()}</div>
+      <div>
+        <div class="account-menu-name">${currentUser.displayName}</div>
+        <span class="account-menu-role ${isAdmin ? 'admin' : ''}">${isAdmin ? 'Yönetici' : 'Müşteri'}</span>
+      </div>
+    </div>
+    <div class="account-menu-theme">
+      <span class="account-menu-theme-label">Görünüm</span>
+      <div class="theme-toggle"></div>
+    </div>
+    <div class="account-menu-sep"></div>
+    <div class="account-menu-group">
+      ${ACCOUNT_MENU.map(item => `
+        <button class="account-menu-item" data-menu-section="${item.key}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>
+          ${item.label}
+        </button>`).join('')}
+    </div>
+    <div class="account-menu-sep"></div>
+    <div class="account-menu-group">
+      ${isAdmin ? `
+      <button class="account-menu-item admin-item" id="accountMenuAdminBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Yönetici Moduna Geç
+      </button>` : ''}
+      <button class="account-menu-item danger" id="accountMenuLogoutBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Çıkış Yap
+      </button>
+    </div>`;
+  renderThemeToggle();
+}
+
+document.getElementById('accountMenu').addEventListener('click', (e) => {
+  const sectionBtn = e.target.closest('[data-menu-section]');
+  const adminBtn = e.target.closest('#accountMenuAdminBtn');
+  const logoutBtn = e.target.closest('#accountMenuLogoutBtn');
+  if(sectionBtn){
+    activeAccountSection = sectionBtn.dataset.menuSection;
+    toggleAccountMenu(false);
+    showProfile();
+  } else if(adminBtn){
+    toggleAccountMenu(false);
+    requestAdminMode();
+  } else if(logoutBtn){
+    toggleAccountMenu(false);
+    logout();
+  }
+});
+
+document.getElementById('accountBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  if(currentUser){
+    toggleAccountMenu();
+  } else {
+    showProfile();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('#accountMenu') && !e.target.closest('#accountBtn')) toggleAccountMenu(false);
+});
 
 function renderProfileView(){
   updateAccountButton();
