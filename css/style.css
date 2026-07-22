@@ -444,7 +444,7 @@
     margin-top:0; padding-top:0; border-top:none;
   }
   .stock-variant-section.open{
-    max-height:560px; overflow-y:auto; overflow-x:hidden;
+    max-height:4000px; overflow:visible;
     margin-top:16px; padding-top:16px; border-top:1px solid var(--line);
   }
   .stock-grid-wrap{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
@@ -468,7 +468,7 @@
   .stock-matrix{border-collapse:collapse; width:100%; font-size:13px;}
   .stock-matrix th, .stock-matrix td{padding:9px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap;}
   .stock-matrix th{color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.03em;}
-  .stock-matrix thead th{position:sticky; top:0; background:var(--bg-soft); z-index:2; box-shadow:0 1px 0 var(--line);}
+  .stock-matrix thead th{position:sticky; top:64px; background:var(--bg-soft); z-index:2; box-shadow:0 1px 0 var(--line);}
   .stock-matrix td:first-child, .stock-matrix th:first-child{text-align:left; position:sticky; left:0; background:var(--bg-soft); font-weight:700; font-size:13.5px; z-index:1;}
   .stock-matrix thead th:first-child{z-index:3;}
   .stock-matrix tbody tr:last-child td{border-bottom:none;}
