@@ -809,22 +809,6 @@
   }
   .add-btn:hover{background:var(--red); transform:scale(1.06);}
 
-  /* ---------- ABOUT / WHY ---------- */
-  .why{background:var(--bg-soft);}
-  .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:38px;}
-  .why-card{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:28px;
-  }
-  .why-icon{
-    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
-    margin-bottom:18px;
-  }
-  .why-card:nth-child(1) .why-icon{background:var(--status-red-bg); color:var(--red);}
-  .why-card:nth-child(2) .why-icon{background:var(--status-blue-bg); color:var(--blue);}
-  .why-card:nth-child(3) .why-icon{background:var(--status-amber-bg); color:var(--status-amber-text);}
-  .why-card h3{font-size:17px; margin-bottom:8px;}
-  .why-card p{font-size:14px; color:var(--muted); line-height:1.6;}
-
   /* ---------- FAQ / SSS ---------- */
   .faq-list{display:flex; flex-direction:column; gap:12px;}
   .faq-item{background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
@@ -949,7 +933,6 @@
     .shop-layout{grid-template-columns:1fr;}
     .cat-sidebar{position:static; max-width:100%;}
     .cat-subs{max-height:none !important;}
-    .why-grid{grid-template-columns:1fr;}
     .nav-links{display:none;}
     .strip .wrap{justify-content:flex-start; gap:22px;}
   }

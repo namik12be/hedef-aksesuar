@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=24" onload="window.__revealBody()" onerror="window.__revealBody()">
+<link rel="stylesheet" href="css/style.css?v=27" onload="window.__revealBody()" onerror="window.__revealBody()">
 </head>
 <body>
 
@@ -29,7 +29,6 @@
     <div class="nav-right">
       <nav class="nav-links">
         <a href="#urunler" data-goto="products"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><path d="M6 2L3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-3-5z"/><path d="M3 7h18"/><path d="M16 11a4 4 0 0 1-8 0"/></svg>Ürünler</a>
-        <a href="#neden-biz" data-goto-section="neden-biz"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Neden Biz</a>
         <a href="#iletisim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>İletişim</a>
       </nav>
       <button class="admin-exit-btn" id="adminExitBtn" data-goto="home">← Panelden Çık</button>
@@ -56,7 +55,6 @@
         <a href="#urunler" class="btn btn-primary" data-goto="products">Ürünleri Keşfet
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="#neden-biz" class="btn btn-ghost" data-goto-section="neden-biz">Neden Hedef?</a>
       </div>
     </div>
     <div class="phone-stage">
@@ -98,34 +96,6 @@
         <button class="see-all-btn" data-goto="products">Tümünü Gör →</button>
       </div>
       <div class="grid featured-grid" id="foryouGrid"></div>
-    </div>
-  </div>
-</section>
-
-<section class="section why" id="neden-biz">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Neden Hedef?</h2>
-        <p>Küçük bir markayız ama işimizi ciddiye alıyoruz.</p>
-      </div>
-    </div>
-    <div class="why-grid">
-      <div class="why-card">
-        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div>
-        <h3>Dayanıklı Malzeme</h3>
-        <p>Tüm kılıflarımız darbe emici, kaliteli malzemeden üretilir ve telefonunu gerçekten korur.</p>
-      </div>
-      <div class="why-card">
-        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
-        <h3>Hızlı Teslimat</h3>
-        <p>Siparişin aynı gün kargoya verilir, kapına en kısa sürede ulaşır.</p>
-      </div>
-      <div class="why-card">
-        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
-        <h3>Kolay İade</h3>
-        <p>Beğenmezsen 14 gün içinde ücretsiz iade, sorun değil.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -452,7 +422,6 @@
         <div class="foot-col">
           <h4>Mağaza</h4>
           <a href="#urunler" data-goto="products">Ürünler</a>
-          <a href="#neden-biz" data-goto-section="neden-biz">Neden Biz</a>
           <a href="#sss" data-goto="faq">Sıkça Sorulan Sorular</a>
         </div>
         <div class="foot-col">
@@ -571,16 +540,16 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastText">Sepete eklendi</span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="js/data.js?v=24"></script>
-<script src="js/utils.js?v=24"></script>
-<script src="js/shop.js?v=24"></script>
-<script src="js/cart.js?v=24"></script>
-<script src="js/navigation.js?v=24"></script>
-<script src="js/auth-profile.js?v=24"></script>
-<script src="js/product-detail.js?v=24"></script>
-<script src="js/admin.js?v=24"></script>
-<script src="js/supabase-sync.js?v=24"></script>
-<script src="js/main.js?v=24"></script>
+<script src="js/data.js?v=27"></script>
+<script src="js/utils.js?v=27"></script>
+<script src="js/shop.js?v=27"></script>
+<script src="js/cart.js?v=27"></script>
+<script src="js/navigation.js?v=27"></script>
+<script src="js/auth-profile.js?v=27"></script>
+<script src="js/product-detail.js?v=27"></script>
+<script src="js/admin.js?v=27"></script>
+<script src="js/supabase-sync.js?v=27"></script>
+<script src="js/main.js?v=27"></script>
 
 </body>
 </html>
