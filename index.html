@@ -30,7 +30,7 @@
       <nav class="nav-links">
         <a href="#urunler" data-goto="products"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><path d="M6 2L3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-3-5z"/><path d="M3 7h18"/><path d="M16 11a4 4 0 0 1-8 0"/></svg>Ürünler</a>
         <a href="#neden-biz" data-goto-section="neden-biz"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Neden Biz</a>
-        <a href="#iletisim"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; vertical-align:-2px;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>İletişim</a>
+        <a href="#" id="navWhatsappLink" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:5px; vertical-align:-2px;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.5 14.02c-.23.65-1.36 1.24-1.87 1.31-.48.07-1.09.1-1.76-.11-.4-.13-.92-.3-1.58-.58-2.78-1.2-4.6-4-4.74-4.19-.14-.19-1.14-1.51-1.14-2.89 0-1.37.72-2.04.97-2.32.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.9.85 2.04.07.14.11.3.02.48-.09.18-.14.3-.28.46-.14.16-.29.36-.42.48-.14.13-.28.28-.12.55.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.36-.23.6-.14.25.09 1.58.75 1.85.88.28.14.46.2.53.32.07.11.07.65-.16 1.3z"/></svg>WhatsApp</a>
       </nav>
       <button class="admin-exit-btn" id="adminExitBtn" data-goto="home">← Panelden Çık</button>
       <button class="icon-btn" id="accountBtn" data-goto="profile" aria-label="Hesabım">
@@ -458,6 +458,7 @@
         <div class="foot-col">
           <h4>İletişim</h4>
           <a href="mailto:merhaba@hedefaksesuar.com">merhaba@hedefaksesuar.com</a>
+          <a href="#" id="footWhatsappLink" target="_blank" rel="noopener" style="display:none;">WhatsApp'tan yaz</a>
         </div>
       </div>
     </div>
@@ -548,9 +549,10 @@
 
     <div class="admin-card">
       <h3>Sosyal Medya Bağlantıları</h3>
-      <p class="muted-note">Footer'daki sosyal medya ikonlarının yönlendirdiği adresler.</p>
+      <p class="muted-note">Footer'daki sosyal medya ikonlarının yönlendirdiği adresler ve WhatsApp iletişim numarası.</p>
       <div class="admin-form">
         <div class="admin-form-grid">
+          <div><label>WhatsApp Numarası</label><input class="admin-input" id="socialWhatsappInput" placeholder="905XXXXXXXXX"></div>
           <div><label>Facebook</label><input class="admin-input" id="socialFacebookInput" placeholder="https://facebook.com/..."></div>
           <div><label>Instagram</label><input class="admin-input" id="socialInstagramInput" placeholder="https://instagram.com/..."></div>
           <div><label>Twitter (X)</label><input class="admin-input" id="socialTwitterInput" placeholder="https://x.com/..."></div>

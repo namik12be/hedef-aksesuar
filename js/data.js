@@ -192,5 +192,6 @@ let SOCIAL_LINKS = {
   facebook: '',
   instagram: '',
   twitter: '',
+  whatsapp: '',
 };
 let NEWSLETTER_SUBSCRIBERS = [];

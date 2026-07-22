@@ -1159,11 +1159,13 @@ document.getElementById('saveManualRateBtn').addEventListener('click', () => {
 });
 
 function renderSocialLinksForm(){
+  document.getElementById('socialWhatsappInput').value = SOCIAL_LINKS.whatsapp || '';
   document.getElementById('socialFacebookInput').value = SOCIAL_LINKS.facebook || '';
   document.getElementById('socialInstagramInput').value = SOCIAL_LINKS.instagram || '';
   document.getElementById('socialTwitterInput').value = SOCIAL_LINKS.twitter || '';
 }
 document.getElementById('saveSocialLinksBtn').addEventListener('click', () => {
+  SOCIAL_LINKS.whatsapp = document.getElementById('socialWhatsappInput').value.trim();
   SOCIAL_LINKS.facebook = document.getElementById('socialFacebookInput').value.trim();
   SOCIAL_LINKS.instagram = document.getElementById('socialInstagramInput').value.trim();
   SOCIAL_LINKS.twitter = document.getElementById('socialTwitterInput').value.trim();
