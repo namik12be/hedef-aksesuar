@@ -376,8 +376,8 @@ function openProductEditor(productId){
         <div><label>Fiyat (₺ +KDV — Üye)</label><input class="admin-input" id="pf_price" type="number" value="${p ? p.price : ''}"></div>
         <div><label>Kategori</label><select class="admin-input" id="pf_brand">${catOptions}</select></div>
         <div><label>Cihaz Tipi</label><select class="admin-input" id="pf_device">${deviceOptions}</select></div>
-        <div><label>Stok Adedi</label><input class="admin-input" id="pf_stock" type="number" value="${p ? p.stock : 20}"></div>
-        <div><label>Düşük Stok Eşiği</label><input class="admin-input" id="pf_threshold" type="number" value="${p ? p.lowStockThreshold : 5}"></div>
+        <div><label>Stok Adedi</label><input class="admin-input" id="pf_stock" type="number" value="${p ? p.stock : 20}" onfocus="this.select()"></div>
+        <div><label>Düşük Stok Eşiği</label><input class="admin-input" id="pf_threshold" type="number" value="${p ? p.lowStockThreshold : 5}" onfocus="this.select()"></div>
       </div>
       <div style="margin-top:6px;">
         <label>Renk Varyantları — yaz, Enter'a bas</label>
@@ -738,7 +738,6 @@ function renderStockTable(){
           <span class="qty-val">${p.stock}</span>
           <button class="qty-btn" onclick="adjustStock(${p.id}, 1)">+</button>
         </div>
-        <button class="admin-btn-icon" onclick="event.stopPropagation(); restockProduct(${p.id})" title="Toplu yenile (25)">↻</button>
         ${hasVariants ? `<svg class="stock-chevron ${isOpen ? 'open' : ''}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>` : ''}
       </div>
       ${hasVariants ? `
@@ -753,7 +752,7 @@ function renderStockTable(){
                   <div class="stock-grid-row">
                     <span class="stock-grid-label"><span class="tag-chip-dot" style="background:${colorHex(c.name)};"></span>${c.name}</span>
                     ${variantStockBadge(c.stock)}
-                    <input type="number" class="stock-grid-input" value="${c.stock}" min="0" onchange="setColorStock(${p.id}, ${i}, this.value)">
+                    <input type="number" class="stock-grid-input" value="${c.stock}" min="0" onfocus="this.select()" onchange="setColorStock(${p.id}, ${i}, this.value)">
                   </div>
                 `).join('')}
               </div>
@@ -767,7 +766,7 @@ function renderStockTable(){
                   <div class="stock-grid-row">
                     <span class="stock-grid-label">${m.name}</span>
                     ${variantStockBadge(m.stock)}
-                    <input type="number" class="stock-grid-input" value="${m.stock}" min="0" onchange="setModelStock(${p.id}, ${i}, this.value)">
+                    <input type="number" class="stock-grid-input" value="${m.stock}" min="0" onfocus="this.select()" onchange="setModelStock(${p.id}, ${i}, this.value)">
                   </div>
                 `).join('')}
               </div>
@@ -795,7 +794,7 @@ function stockMatrixHTML(p){
           ${p.variants.models.map((m, mi) => `
             <tr>
               <td>${m.name}</td>
-              ${columns.map(col => `<td><input type="number" class="stock-matrix-input" min="0" value="${modelVariantStockValue(m, col.name)}" onchange="setModelVariantStock(${p.id}, ${mi}, '${col.name.replace(/'/g, "\\'")}', this.value)"></td>`).join('')}
+              ${columns.map(col => `<td><input type="number" class="stock-matrix-input" min="0" value="${modelVariantStockValue(m, col.name)}" onfocus="this.select()" onchange="setModelVariantStock(${p.id}, ${mi}, '${col.name.replace(/'/g, "\\'")}', this.value)"></td>`).join('')}
               <td>${variantStockBadge(modelStockTotal(p, m))}</td>
             </tr>
           `).join('')}
@@ -851,13 +850,6 @@ function adjustStock(id, delta){
   renderStockTable(); renderStats(); renderLowStockList(); renderProductsTable(); renderGrid(); renderFeaturedRows();
   scheduleSupabaseSync();
 }
-function restockProduct(id){
-  const p = PRODUCTS.find(x => x.id === id);
-  p.stock = 25;
-  renderStockTable(); renderStats(); renderLowStockList(); renderProductsTable(); renderGrid(); renderFeaturedRows();
-  scheduleSupabaseSync();
-}
-
 /* ---- Barkodlar ---- */
 let barcodeSearchTerm = '';
 let barcodeExpanded = {};

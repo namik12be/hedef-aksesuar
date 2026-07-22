@@ -1,13 +1,39 @@
 /* ============================= PRODUCT DETAIL PAGE ============================= */
 
+/* Renk adı -> hex eşlemesi. Anahtarlar normalizeTr() çıktısıyla (küçük harf, Türkçe
+   karaktersiz) eşleşir; bu yüzden burada SADECE ASCII/küçük harf hallerini yazmak yeterli
+   — 'Kırmızı', 'KIRMIZI' vb. hepsi normalizeTr ile 'kirmizi'ye döner. Kapsamlı tutuldu ki
+   yeni bir renk ismi (açık/koyu tonlar dahil) "tanınmadı" sorunu yaşanmasın. */
 function colorHex(name){
   const map = {
-    'kirmizi':'#E42313', 'kırmızı':'#E42313', 'mavi':'#1B48D6', 'sari':'#FFC738', 'sarı':'#FFC738',
-    'siyah':'#1a1a1f', 'lacivert':'#13379E', 'kahverengi':'#6b4527', 'beyaz':'#eef1f5',
-    'seffaf':'#eef1f5', 'şeffaf':'#eef1f5', 'gri':'#9a9a9a', 'mor':'#7B4FD1', 'pembe':'#FF7EB6',
-    'turuncu':'#FF7A1A', 'yesil':'#2E9E4F', 'yeşil':'#2E9E4F', 'bej':'#D8C4A0', 'altin':'#D4AF37',
-    'altın':'#D4AF37', 'gumus':'#B9BBBE', 'gümüş':'#B9BBBE', 'bordo':'#7A1F2B', 'haki':'#7D8353',
-    'krem':'#F3E9D2', 'turkuaz':'#1FB6C1',
+    // Nötr
+    'siyah':'#1a1a1f', 'beyaz':'#eef1f5', 'seffaf':'#eef1f5',
+    'gri':'#9a9a9a', 'acik gri':'#d4d4d8', 'koyu gri':'#4b4b52', 'antrasit':'#2f2f35',
+    // Kırmızı ailesi
+    'kirmizi':'#E42313', 'acik kirmizi':'#F16456', 'koyu kirmizi':'#A81810',
+    'bordo':'#7A1F2B', 'koyu bordo':'#4D141C',
+    // Pembe ailesi
+    'pembe':'#FF7EB6', 'acik pembe':'#FFC1DE', 'koyu pembe':'#D6336C',
+    'fusya':'#E91E8C', 'somon':'#FF8C69', 'gul kurusu':'#C48793',
+    // Turuncu ailesi
+    'turuncu':'#FF7A1A', 'acik turuncu':'#FFB067', 'koyu turuncu':'#C85A00', 'mercan':'#FF6F5E',
+    // Sarı ailesi
+    'sari':'#FFC738', 'acik sari':'#FFE38A', 'koyu sari':'#D19A00', 'hardal':'#C9A227',
+    // Yeşil ailesi
+    'yesil':'#2E9E4F', 'acik yesil':'#7FD69A', 'koyu yesil':'#14532D',
+    'zeytin yesili':'#6B7A3A', 'nane yesili':'#8FD9C4', 'cimen yesili':'#6FAE3E', 'haki':'#7D8353',
+    // Mavi ailesi
+    'mavi':'#1B48D6', 'acik mavi':'#6FA8F5', 'koyu mavi':'#0E2B7A',
+    'lacivert':'#13379E', 'gece mavisi':'#0B1F4D', 'buz mavisi':'#BFE4F0', 'gok mavisi':'#56CCF2', 'petrol':'#114B5F',
+    'turkuaz':'#1FB6C1', 'acik turkuaz':'#6FDDE3', 'koyu turkuaz':'#0E7A82',
+    // Mor ailesi
+    'mor':'#7B4FD1', 'acik mor':'#B79CEE', 'koyu mor':'#4A2A8C', 'lila':'#C6A2E8', 'lavanta':'#B296E3',
+    // Kahverengi ailesi
+    'kahverengi':'#6b4527', 'acik kahverengi':'#A9805A', 'koyu kahverengi':'#3D2313', 'taba':'#8A6D4E',
+    'vizon':'#A69B8D',
+    'bej':'#D8C4A0', 'acik bej':'#EDE0C8', 'koyu bej':'#BFA679', 'krem':'#F3E9D2',
+    // Metalik
+    'altin':'#D4AF37', 'gumus':'#B9BBBE', 'bronz':'#CD7F32', 'bakir':'#B87333', 'rose gold':'#E6B7A9',
   };
   const key = normalizeTr(name);
   return map[key] || '#c9cfd8';
