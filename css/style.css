@@ -464,7 +464,7 @@
   }
   .stock-grid-input:focus{outline:none; border-color:var(--blue);}
   @media (max-width:700px){ .stock-grid-wrap{grid-template-columns:1fr;} }
-  .stock-matrix-wrap{overflow-x:auto; background:var(--bg-soft); border-radius:10px; padding:4px 12px;}
+  .stock-matrix-wrap{overflow-x:auto; overflow-y:visible; background:var(--bg-soft); border-radius:10px; padding:4px 12px;}
   .stock-matrix{border-collapse:collapse; width:100%; font-size:13px;}
   .stock-matrix th, .stock-matrix td{padding:9px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap;}
   .stock-matrix th{color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.03em;}
