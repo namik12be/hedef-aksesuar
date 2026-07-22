@@ -497,11 +497,16 @@
   .admin-action-btn.danger:hover{background:var(--status-red-bg); border-color:var(--red);}
   .admin-action-btn:disabled{opacity:.4; cursor:not-allowed; pointer-events:none;}
 
-  /* ---- Ana Sayfa Düzenle ---- */
-  .home-editor-toolbar{
-    display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:10px 12px; margin-bottom:16px;
-    background:var(--bg-soft); border:1px solid var(--line); border-radius:12px;
+  /* ---- Ana Sayfa Düzenle: gerçek ana sayfanın üzerinde, sabit üst çubukla düzenleme ---- */
+  .home-edit-bar{
+    position:fixed; top:0; left:0; right:0; z-index:200; background:var(--surface);
+    border-bottom:1px solid var(--line); box-shadow:var(--shadow);
   }
+  .home-edit-bar-inner{
+    max-width:1180px; margin:0 auto; padding:10px 28px; display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  }
+  body.home-editing{padding-top:56px;}
+  body.home-editing header{top:56px;}
   .home-editor-toolbar-label{font-size:12px; font-weight:700; color:var(--muted);}
   .home-editor-toolbar-sep{width:1px; height:20px; background:var(--line); margin:0 4px;}
   .home-color-swatch{
@@ -515,12 +520,12 @@
     color:var(--muted); border:1px solid var(--line); background:var(--surface); flex-shrink:0;
   }
   .home-icon-btn:hover{color:var(--ink); border-color:var(--ink); background:var(--bg-soft);}
-  .home-editor-preview{
-    background:var(--bg); border:1px solid var(--line); border-radius:var(--radius); padding:6px 18px 18px;
+  /* Düzenleme modundayken düzenlenebilir yazılar kesikli çizgiyle işaretlenir */
+  body.home-editing [data-hk]{
+    outline:1.5px dashed var(--blue); outline-offset:4px; border-radius:6px; cursor:text;
   }
-  .home-editable{border-radius:6px; transition:box-shadow .15s ease;}
-  .home-editable:hover{box-shadow:0 0 0 2px var(--line);}
-  .home-editable:focus{outline:none; box-shadow:0 0 0 2px var(--blue);}
+  body.home-editing [data-hk]:hover{outline-color:var(--red);}
+  body.home-editing [data-hk]:focus{outline:2px solid var(--blue); outline-offset:4px;}
   .admin-btn-icon{
     width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;
     border:1.5px solid var(--line); color:var(--muted); transition:all .15s ease; margin-right:4px;
