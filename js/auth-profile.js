@@ -46,10 +46,14 @@ function updateAccountButton(){
    o sayfanın ilgili bölümüne yönlendiriyor. Beğenilmezse accountBtn'in
    click listener'ı aşağıda tek yerde, kolayca eski showProfile() davranışına
    döndürülebilir. */
+let accountMenuScreen = 'main'; // 'main' | 'profile'
+
 function toggleAccountMenu(forceState){
   const el = document.getElementById('accountMenu');
   if(!el) return;
-  const next = typeof forceState === 'boolean' ? forceState : !el.classList.contains('open');
+  const wasOpen = el.classList.contains('open');
+  const next = typeof forceState === 'boolean' ? forceState : !wasOpen;
+  if(next && !wasOpen) accountMenuScreen = 'main';
   el.classList.toggle('open', next);
   if(next) renderAccountMenu();
 }
@@ -58,6 +62,46 @@ function renderAccountMenu(){
   const el = document.getElementById('accountMenu');
   if(!el || !currentUser) return;
   const isAdmin = currentUser.role === 'admin';
+
+  if(accountMenuScreen === 'profile'){
+    el.innerHTML = `
+      <button class="account-menu-back" id="accountMenuBackBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Geri
+      </button>
+      <div class="account-menu-profile-edit">
+        <div class="account-menu-edit-avatar-wrap">
+          <div class="account-menu-avatar large" id="accountMenuEditAvatarBox">
+            ${currentUser.photo ? `<img src="${currentUser.photo}">` : currentUser.displayName.charAt(0).toUpperCase()}
+            <label class="profile-avatar-edit" for="accountMenuPhotoInput" aria-label="Fotoğraf değiştir">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+            </label>
+            <input type="file" id="accountMenuPhotoInput" accept="image/*" style="display:none;">
+          </div>
+        </div>
+        <label>Ad</label>
+        <input class="admin-input" id="accountMenuNameInput" value="${currentUser.displayName.replace(/"/g,'&quot;')}">
+        <label>E-posta</label>
+        <input class="admin-input" id="accountMenuEmailInput" value="${currentUser.email || ''}">
+        <label>Telefon</label>
+        <input class="admin-input" id="accountMenuPhoneInput" value="${currentUser.phone || ''}">
+        <button class="btn btn-primary" id="accountMenuSaveBtn" style="width:100%; justify-content:center;">Kaydet</button>
+      </div>`;
+    const photoInput = document.getElementById('accountMenuPhotoInput');
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        currentUser.photo = reader.result;
+        updateAccountButton();
+        renderAccountMenu();
+      };
+      reader.readAsDataURL(file);
+    });
+    return;
+  }
+
   el.innerHTML = `
     <div class="account-menu-head">
       <div class="account-menu-avatar">${currentUser.photo ? `<img src="${currentUser.photo}">` : currentUser.displayName.charAt(0).toUpperCase()}</div>
@@ -69,6 +113,13 @@ function renderAccountMenu(){
     <div class="account-menu-theme">
       <span class="account-menu-theme-label">Görünüm</span>
       <div class="theme-toggle"></div>
+    </div>
+    <div class="account-menu-sep"></div>
+    <div class="account-menu-group">
+      <button class="account-menu-item" id="accountMenuProfileBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profilim
+      </button>
     </div>
     <div class="account-menu-sep"></div>
     <div class="account-menu-group">
@@ -97,6 +148,9 @@ document.getElementById('accountMenu').addEventListener('click', (e) => {
   const sectionBtn = e.target.closest('[data-menu-section]');
   const adminBtn = e.target.closest('#accountMenuAdminBtn');
   const logoutBtn = e.target.closest('#accountMenuLogoutBtn');
+  const profileBtn = e.target.closest('#accountMenuProfileBtn');
+  const backBtn = e.target.closest('#accountMenuBackBtn');
+  const saveBtn = e.target.closest('#accountMenuSaveBtn');
   if(sectionBtn){
     activeAccountSection = sectionBtn.dataset.menuSection;
     toggleAccountMenu(false);
@@ -107,6 +161,18 @@ document.getElementById('accountMenu').addEventListener('click', (e) => {
   } else if(logoutBtn){
     toggleAccountMenu(false);
     logout();
+  } else if(profileBtn){
+    accountMenuScreen = 'profile';
+    renderAccountMenu();
+  } else if(backBtn){
+    accountMenuScreen = 'main';
+    renderAccountMenu();
+  } else if(saveBtn){
+    currentUser.displayName = document.getElementById('accountMenuNameInput').value.trim() || currentUser.displayName;
+    currentUser.email = document.getElementById('accountMenuEmailInput').value.trim();
+    currentUser.phone = document.getElementById('accountMenuPhoneInput').value.trim();
+    updateAccountButton();
+    showToast('Bilgilerin güncellendi.');
   }
 });
 
